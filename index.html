@@ -105,7 +105,7 @@ h3{font-size:16.5px;font-weight:800}
 .hero .credit{position:absolute;top:12px;right:14px;z-index:2;font-size:10px;opacity:.75}
 .search{display:flex;align-items:center;gap:10px;width:100%;margin-top:-26px;position:relative;z-index:3;background:var(--card);border:0;border-radius:99px;padding:8px 8px 8px 18px;box-shadow:0 10px 30px rgba(17,48,42,.14);color:var(--muted);font-weight:600;text-align:left}
 .search span{flex:1}
-.search .go{width:44px;height:44px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center}
+.search .go{flex:none;width:44px;height:44px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center}
 .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
 .quick button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--ink)}
 .quick button span.q{width:58px;height:58px;border-radius:20px;background:var(--card);box-shadow:var(--shadow);display:grid;place-items:center;color:var(--pri)}
@@ -279,6 +279,12 @@ h3{font-size:16.5px;font-weight:800}
 .mp-bot{display:flex;gap:8px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:var(--card)}.mp-bot .mp-ok{flex:1}.mp-z{width:48px;font-size:20px;font-weight:800}
 .pmiss{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}.pmiss span{font-size:10.5px;font-weight:800;color:var(--coral);background:var(--coral-bg);padding:2px 7px;border-radius:999px}.prow{align-items:flex-start}.prep-top{margin-top:12px}.prep-top .donut>div{display:flex;flex-direction:column}
 .prepban{display:flex;gap:12px;align-items:center;width:100%;margin:14px 0 4px;padding:12px 14px;border:1.5px solid var(--sun);border-radius:18px;background:var(--sun-bg);color:var(--ink);text-align:left}.prepban>span:nth-child(2){flex:1;min-width:0}.prepban b{display:block;font-size:15px}.prepban small{display:block;font-size:12px;color:var(--muted)}.pb-r{width:44px;height:44px;border-radius:50%;background:var(--sun);color:#3a2a00;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.hconv2{margin-top:16px}.hc-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.ratepill{display:inline-flex;align-items:center;gap:5px;border:0;background:var(--soft);color:var(--ink);font-weight:800;font-size:12px;padding:6px 10px;border-radius:999px}.ratepill svg{width:13px;height:13px;color:var(--pri)}
+.hc-edit{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--sun-bg);display:flex;flex-direction:column;gap:2px}.ratein2{width:110px;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;font-weight:800}
+.hc-box{position:relative;margin-top:12px;border:1.5px solid var(--line);border-radius:18px;background:var(--bg);overflow:hidden}.hc-row{display:flex;align-items:center;gap:10px;padding:12px 14px;min-height:58px}.hc-row+.hc-swap+.hc-row,.hc-row.res{border-top:1.5px solid var(--line);background:var(--card)}
+.hc-cur{flex:none;min-width:40px;font-weight:800;font-size:13px;color:var(--muted);letter-spacing:.04em}.hc-row input{flex:1;min-width:0;border:0;background:transparent;font-size:26px;font-weight:800;color:var(--ink);outline:none;font-family:inherit;padding:0}.hc-row input::placeholder{color:var(--line)}.hc-num{font-size:26px;font-weight:800;color:var(--pri)}.hc-num.muted{color:var(--line)}
+.hc-swap{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--pri);display:grid;place-items:center;z-index:1}
+.hconv2 .qchips{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
 .mring{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .mringl{position:absolute;transform:translate(-50%,-50%);font-size:10px;font-weight:800;color:#0e5d55;background:rgba(255,255,255,.9);padding:2px 7px;border-radius:999px;white-space:nowrap;pointer-events:none;border:1px solid rgba(20,133,122,.35)}
 .mringl.far{color:#9a3412;border-color:rgba(194,65,12,.35)}
@@ -1160,7 +1166,7 @@ function vHome(){
   const hero=MEDIA.hero;
   let h=`<header class="hdr"><div><div class="hi">${conn==="snapshot"?"Olá! 👋":"Olá, "+esc(me)+" 👋"}</div><div class="sync">${syncTxt()}</div></div><div class="row" style="gap:8px"><button class="iconbtn" data-a="alerts" aria-label="Pendências">${ic("bell")}${al.length?`<span class="b">${al.length}</span>`:""}</button><button class="avatar" data-a="more" data-v="ajustes" aria-label="Ajustes">${esc(me[0]||"?")}</button></div></header>
   <section class="hero">${hero?`<img src="${esc(hero.src)}" alt="Mar de sete cores em San Andrés">`:`<canvas id="heroArt" aria-hidden="true"></canvas>`}
-   <div class="in"><div class="flagbar"><i></i><i></i><i></i></div><h1>Colômbia<br><em>2026</em></h1><div style="font-weight:600;opacity:.95">San Andrés · Cartagena · Medellín · Bogotá</div><div class="cdown">${cd}</div></div></section>
+   <div class="in"><div class="flagbar"><i></i><i></i><i></i></div><h1>Colômbia<br><em>2026</em></h1><div style="font-weight:600;opacity:.95">San Andrés · Cartagena · Medellín · Bogotá · Belém</div><div class="cdown">${cd}</div></div></section>
   <button class="search" data-a="tab" data-v="explorar">${ic("search")}<span>O que vamos fazer hoje?</span><span class="go">${ic("arrow")}</span></button>
   ${(()=>{const P=prepStats();return P.miss&&T.phase!=="depois"?`<button class="prepban" data-a="more" data-v="prep"><span class="pb-r">${P.pct}%</span><span><b>Deixar o app pronto</b><small>Faltam ${P.miss} informações: hospedagens, voos, passeios e gastos</small></span>${ic("chev","s")}</button>`:"";})()}
   <div class="quick q8"><button data-a="goDay" data-v="${T.phase==="durante"?todayFor():TRIP.start}"><span class="q">${ic("list","l")}</span>Roteiro</button><button data-a="fullMap" data-v="${esc(MCITIES.includes(curCity0)?curCity0:"San Andrés")}"><span class="q">${ic("map","l")}</span>Mapa</button><button data-a="tab" data-v="passeios"><span class="q">${ic("boat","l")}</span>Passeios</button><button data-a="tab" data-v="gastos"><span class="q">${ic("wallet","l")}</span>Gastos</button><button data-a="qexp"><span class="q sun">${ic("plus","l")}</span>Anotar gasto</button><button data-a="resTab" data-v="voos"><span class="q">${ic("ticket","l")}</span>Reservas</button><button data-a="more" data-v="checklist"><span class="q">${ic("check","l")}</span>Checklist</button><button data-a="pdf"><span class="q">${ic("file","l")}</span>PDF</button></div>${homeConv()}`;
@@ -1173,7 +1179,7 @@ function vHome(){
   <button class="tile" data-a="more" data-v="checklist" style="border:0;text-align:left;color:var(--ink)"><span class="eyebrow">Viagem pronta</span><div class="donut">${donut(rd.pct)}<div class="small muted">Voos, hotéis, passeios e checklist</div></div></button></div>`;
   // destinos
   const stays=[];Object.values(S.hotels).filter(x=>x.city!=="Belém"&&x.status!=="cancelado").sort((a,b)=>(a.checkin||"").localeCompare(b.checkin||"")).forEach(x=>{const o=stays.find(y=>y.city===x.city);if(o){if(x.checkout>o.checkout)o.checkout=x.checkout;if(x.checkin<o.checkin)o.checkin=x.checkin;}else stays.push({city:x.city,checkin:x.checkin,checkout:x.checkout});});
-  h+=fold("h-dest",`<h2>Destinos</h2><span class="fmeta">4 cidades</span>`,`<div class="hscroll">${stays.map(s=>destCard(s.city,`${dShort(s.checkin)} – ${dShort(s.checkout)} · ${nights(s)} noites`,s.checkin)).join("")}${destCard("Bogotá","27/11 · passeio na conexão","2026-11-27")}</div>`,true);
+  h+=fold("h-dest",`<h2>Destinos</h2><span class="fmeta">5 cidades</span>`,`<div class="hscroll">${stays.map(s=>destCard(s.city,`${dShort(s.checkin)} – ${dShort(s.checkout)} · ${nights(s)} noites`,s.checkin)).join("")}${destCard("Bogotá","27/11 · passeio na conexão","2026-11-27")}${destCard("Belém","28/11 · 1 dia inteiro","2026-11-28")}</div>`,true);
   // hospedagem
   const nh=Object.entries(S.hotels).map(([id,x])=>({id,...x})).filter(x=>x.checkout&&ts(x.checkout,"12:00",x.city)>T.now&&x.city!=="Belém").sort((a,b)=>(a.checkin||"").localeCompare(b.checkin||""))[0];
   if(nh){const ph=nh.photo?{src:nh.photo}:cityPhoto(nh.city);h+=fold("h-hotel",`<h2>Próxima hospedagem</h2><span class="fmeta">${esc(nh.city)}</span>`,`<button class="prow" data-a="resTab" data-v="hoteis"><div class="thumb">${img(ph,nh.city,cityArt(nh.city))}</div><div class="pinfo" style="flex:1"><span class="eyebrow">${esc(nh.city)}</span><b>${esc(nh.name&&nh.name!=="A definir"?nh.name:"Hospedagem a definir")}</b><span class="small muted">${dShort(nh.checkin)} – ${dShort(nh.checkout)} · ${nights(nh)} noites</span></div>${statusPill(nh.status)}</button>`,true);}
@@ -2398,10 +2404,16 @@ function rateBox(id){return`<div class="ratebox"><span>R$ 1 =</span><span>COP</s
 async function saveCopRate(v){v=+String(v).replace(/\D/g,"");if(!v||v<100||v>5000){toast("Digite quantos pesos vale R$ 1 (ex.: 594)");return;}const s=JSON.parse(JSON.stringify(settings()));s.rates={...(s.rates||{}),BRL:1,COP:1/v};s.ratesDate=todayFor();
   if(conn==="snapshot"){S.meta.settings=s;saveCache();render();toast("Cotação usada só neste aparelho");return;}const ok=await write("meta","settings",s);if(ok!==false)toast(`Cotação salva: R$ 1 = COP ${v.toLocaleString("pt-BR")}`);}
 function convOut(v){if(!v)return`<span class="muted">Digite o valor em pesos</span>`;const b=v*rate("COP");return`<b>R$ ${b<100?b.toFixed(2).replace(".",","):Math.round(b).toLocaleString("pt-BR")}</b><span>COP ${v.toLocaleString("pt-BR")}</span>`;}
-function homeConv(){return`<div class="card hconv"><div class="between"><span class="eyebrow">${ic("cash","s")} Conversor</span>${rateBox("hcRate")}</div>
-  <div class="hc-row"><span class="hc-cur">COP</span><input id="hcA" inputmode="numeric" placeholder="Valor em pesos" autocomplete="off" value="${hcVal||""}"><div class="hc-out" id="hcO">${convOut(hcVal)}</div></div>
-  <div class="qchips">${[5000,10000,20000,50000,100000].map(v=>`<button type="button" class="chip" data-a="hcSet" data-v="${v}">${v/1000} mil</button>`).join("")}</div></div>`;}
-function hcUpdate(){const i=$("#hcA"),o=$("#hcO");if(!i||!o)return;const v=+String(i.value).replace(/\D/g,"");hcVal=v;o.innerHTML=convOut(v);}
+let hcDir="cop",hcEdit=false;
+function hcRes(v){if(!v)return`<span class="hc-cur">${hcDir==="cop"?"R$":"COP"}</span><b class="hc-num muted">0</b>`;const r=rate("COP");if(hcDir==="cop"){const b=v*r;return`<span class="hc-cur">R$</span><b class="hc-num">${b<100?b.toFixed(2).replace(".",","):Math.round(b).toLocaleString("pt-BR")}</b>`;}const c=Math.round(v/r/100)*100;return`<span class="hc-cur">COP</span><b class="hc-num">${c.toLocaleString("pt-BR")}</b>`;}
+function homeConv(){const chips=hcDir==="cop"?[5000,10000,20000,50000,100000]:[10,20,50,100,200];
+  return`<div class="card hconv2"><div class="hc-head"><span class="eyebrow">${ic("cash","s")} Conversor</span><button type="button" class="ratepill" data-a="hcRateEdit">R$ 1 = COP ${copPerBRL().toLocaleString("pt-BR")} ${ic("edit","s")}</button></div>
+  ${hcEdit?`<div class="hc-edit"><span class="small muted">Quantos pesos vale R$ 1 hoje?</span><div class="row" style="gap:8px;margin-top:6px"><input id="hcRate" class="ratein2" inputmode="numeric" value="${copPerBRL()}" aria-label="Pesos por real"><button type="button" class="btn sm pri" data-a="rateSave" data-v="hcRate">Salvar</button></div>${settings().ratesDate?`<span class="small muted">Última atualização: ${dShort(settings().ratesDate)}</span>`:""}</div>`:""}
+  <div class="hc-box"><div class="hc-row"><span class="hc-cur">${hcDir==="cop"?"COP":"R$"}</span><input id="hcA" inputmode="numeric" placeholder="0" autocomplete="off" value="${hcVal?(hcDir==="cop"?hcVal.toLocaleString("pt-BR"):hcVal):""}" aria-label="Valor"></div>
+   <button type="button" class="hc-swap" data-a="hcSwap" aria-label="Inverter moedas">${ic("swap","s")}</button>
+   <div class="hc-row res" id="hcO">${hcRes(hcVal)}</div></div>
+  <div class="qchips">${chips.map(v=>`<button type="button" class="chip" data-a="hcSet" data-v="${v}">${hcDir==="cop"?(v/1000)+" mil":"R$ "+v}</button>`).join("")}</div></div>`;}
+function hcUpdate(){const i=$("#hcA"),o=$("#hcO");if(!i||!o)return;const raw=String(i.value).replace(/\D/g,"");const v=+raw;hcVal=v;if(v&&hcDir==="cop"){const f=v.toLocaleString("pt-BR");if(i.value!==f){i.value=f;}}o.innerHTML=hcRes(v);}
 
 /* gasto rápido */
 const QX_SUG=[["Almoço","Alimentação","🍽️"],["Jantar","Alimentação","🍷"],["Café/lanche","Alimentação","☕"],["Táxi/Uber","Transporte","🚕"],["Mercado","Compras","🛒"],["Ingresso","Passeios","🎟️"],["Passeio","Passeios","⛵"],["Bebidas","Alimentação","🍹"],["Lembrança","Compras","🎁"],["Taxa","Taxas","🧾"]];
@@ -2758,8 +2770,10 @@ document.addEventListener("click",async e=>{
    case"qxSave":qxSave();break;
    case"qxFull":{qxRead();const p={desc:qx.desc,date:qx.date,cat:qx.cat,amount:+parseNum(qx.amount)||"",cur:qx.cur,pay:qx.pay,payer:qx.payer,method:qx.method,perPerson:qx.per,split:qx.split||[]};closeForm();openForm("expenses",null,p);break;}
    case"ckPerson":toggleCheckPerson(v);break;
-   case"rateSave":{const i=$("#"+v);if(i)await saveCopRate(i.value);if(qx&&$("#qxA")){qxRead();renderQuickExp();}else{hcUpdate();qcUpdate();}break;}
+   case"rateSave":{const i=$("#"+v);if(v==="hcRate")hcEdit=false;if(i)await saveCopRate(i.value);if(qx&&$("#qxA")){qxRead();renderQuickExp();}else{hcUpdate();qcUpdate();}break;}
    case"hcSet":{const i=$("#hcA");if(i){i.value=v;hcUpdate();}break;}
+   case"hcSwap":{hcDir=hcDir==="cop"?"brl":"cop";hcVal=0;render();break;}
+   case"hcRateEdit":hcEdit=!hcEdit;render();if(hcEdit)setTimeout(()=>{const i=$("#hcRate");if(i){i.focus();i.select();}},50);break;
    case"offSave":saveOffline();break;
    case"wallet":ui.wallet=v;render();break;
    case"docShow":showDoc(el.dataset.id);break;
