@@ -759,6 +759,50 @@ body.withtray .wrap{padding-bottom:calc(var(--nav) + 170px + env(safe-area-inset
 .ovc::after{content:"Ver mapa do dia ›";position:absolute;right:14px;bottom:8px;font-size:11px;font-weight:800;color:var(--pri)}
 .ovc{position:relative;padding-bottom:24px}
 @media (min-width:700px){.fgrid{grid-template-columns:1fr 1fr 1fr}.pcard{width:200px}}
+
+/* voos, kit do dia */
+.kit{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.kit>button{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--card);border:0;border-radius:18px;padding:12px;box-shadow:var(--shadow);color:var(--ink);min-width:0}
+.kit-i{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:none;background:var(--sun-bg);color:var(--sun-ink)}
+.kit>button:last-child .kit-i{background:var(--info-bg);color:var(--info)}
+.kit small{display:block;font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+.kit b{display:block;font-size:17px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.kit em{display:block;font-style:normal;font-size:11.5px;color:var(--muted);line-height:1.3}
+.kit>button>span:last-child{min-width:0}
+.bagi{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 2px;color:var(--ink)}
+.bagi:last-child{border-bottom:0}
+.bagi b{display:block;font-size:14.5px}.bagi small{display:block;font-size:12px;color:var(--muted)}
+.bagi .cbox{color:transparent}.bagi.on .cbox{background:var(--ok);border-color:var(--ok);color:#fff}
+.bagi.on b{text-decoration:line-through;color:var(--muted)}
+.fcard{background:var(--card);border-radius:20px;padding:14px;box-shadow:var(--shadow);margin-bottom:10px;border-left:5px solid var(--line)}
+.fcard.aberto{border-left-color:var(--ok)}.fcard.breve{border-left-color:var(--sun)}.fcard.fechou,.fcard.foi{opacity:.75}
+.fc-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:6px}
+.fc-top b{font-size:18px;display:block}.fc-top small{font-size:12.5px;color:var(--muted)}
+.fc-row{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:13px;align-items:baseline}
+.fc-k{flex:none;width:112px;color:var(--muted);font-weight:700;display:flex;gap:5px;align-items:center}
+.fc-v{flex:1;min-width:0}.fc-v.aberto{color:var(--ok);font-weight:800}.fc-v.breve{font-weight:700}
+.notif .chips .chip{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25)}
+.notif .chips .chip[aria-pressed="true"]{background:#fff;color:var(--dark)}
+.conn{margin-bottom:10px}
+.conn-tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
+.conn-tags span{display:inline-flex;gap:4px;align-items:center;font-size:12px;font-weight:700;background:var(--soft);border-radius:99px;padding:4px 9px}
+.ctl{position:relative;margin-top:8px}
+.ctl-i{display:flex;gap:10px;padding:8px 0;position:relative}
+.ctl-i:not(:last-child)::after{content:"";position:absolute;left:27px;top:30px;bottom:-6px;width:2px;background:var(--line)}
+.ctl-t{flex:none;width:56px;font-size:12px;font-weight:800;color:var(--pri);padding-top:2px;line-height:1.25}
+.ctl-i b{display:block;font-size:14px}.ctl-i small{display:block;font-size:12.5px;color:var(--muted);line-height:1.4}
+.vip{background:var(--card);border-radius:20px;box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden}
+.vip summary{display:flex;gap:10px;align-items:center;padding:13px 14px;cursor:pointer;list-style:none}
+.vip summary::-webkit-details-marker{display:none}
+.vip[open] summary>svg:last-child{transform:rotate(90deg)}
+.vip-ic{width:36px;height:36px;border-radius:12px;background:var(--sun-bg);color:var(--sun-ink);display:grid;place-items:center;flex:none}
+.vip-h{flex:1;min-width:0}.vip-h b{display:block;font-size:15px}.vip-h small{display:block;font-size:12px;color:var(--muted)}
+.vip-b{padding:0 14px 14px}
+.vip-r{display:flex;gap:8px;font-size:13px;padding:5px 0;align-items:flex-start}.vip-r svg{flex:none;margin-top:2px;color:var(--muted)}
+.vip-li{font-size:13px;padding:4px 0 4px 14px;position:relative}.vip-li::before{content:"";position:absolute;left:2px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--pri2)}
+.hj-fl3{display:flex;gap:8px;align-items:center;justify-content:space-between;width:100%;margin-top:10px;padding:9px 11px;border-radius:14px;border:0;background:rgba(255,255,255,.1);color:#fff;font-size:12.5px;text-align:left;line-height:1.45}
+.flguide{display:flex;gap:5px;align-items:center;margin-top:8px;padding:6px 10px;border-radius:12px;border:0;background:var(--soft);color:var(--ink);font-size:12px;font-weight:700;text-align:left}
+.ckban{border-color:var(--ok);background:var(--ok-bg)}.ckban .pb-r{background:var(--ok);color:#fff}
 </style>
 
 <div class="wrap" id="app" aria-live="polite"></div>
@@ -1168,7 +1212,7 @@ function vHome(){
   <section class="hero">${hero?`<img src="${esc(hero.src)}" alt="Mar de sete cores em San Andrés">`:`<canvas id="heroArt" aria-hidden="true"></canvas>`}
    <div class="in"><div class="flagbar"><i></i><i></i><i></i></div><h1>Colômbia<br><em>2026</em></h1><div style="font-weight:600;opacity:.95">San Andrés · Cartagena · Medellín · Bogotá · Belém</div><div class="cdown">${cd}</div></div></section>
   <button class="search" data-a="tab" data-v="explorar">${ic("search")}<span>O que vamos fazer hoje?</span><span class="go">${ic("arrow")}</span></button>
-  ${(()=>{const P=prepStats();return P.miss&&T.phase!=="depois"?`<button class="prepban" data-a="more" data-v="prep"><span class="pb-r">${P.pct}%</span><span><b>Deixar o app pronto</b><small>Faltam ${P.miss} informações: hospedagens, voos, passeios e gastos</small></span>${ic("chev","s")}</button>`:"";})()}
+  ${(()=>{const f=flightsSorted().find(x=>x.dep&&flDepTs(x)>Date.now());if(!f)return"";const st=ckState(f);if(!(st.s==="aberto"||(st.s==="breve"&&st.open-Date.now()<72*36e5)))return"";return`<button class="prepban ckban" data-a="more" data-v="voos"><span class="pb-r">${ic("plane","s")}</span><span><b>${st.s==="aberto"?"Check-in aberto":"Check-in em breve"}: ${esc(f.frm)} → ${esc(f.to)}</b><small>${esc(st.txt)}</small></span>${ic("chev","s")}</button>`;})()}${(()=>{const P=prepStats();return P.miss&&T.phase!=="depois"?`<button class="prepban" data-a="more" data-v="prep"><span class="pb-r">${P.pct}%</span><span><b>Deixar o app pronto</b><small>Faltam ${P.miss} informações: hospedagens, voos, passeios e gastos</small></span>${ic("chev","s")}</button>`:"";})()}
   <div class="quick q8"><button data-a="goDay" data-v="${T.phase==="durante"?todayFor():TRIP.start}"><span class="q">${ic("list","l")}</span>Roteiro</button><button data-a="fullMap" data-v="${esc(MCITIES.includes(curCity0)?curCity0:"San Andrés")}"><span class="q">${ic("map","l")}</span>Mapa</button><button data-a="tab" data-v="passeios"><span class="q">${ic("boat","l")}</span>Passeios</button><button data-a="tab" data-v="gastos"><span class="q">${ic("wallet","l")}</span>Gastos</button><button data-a="qexp"><span class="q sun">${ic("plus","l")}</span>Anotar gasto</button><button data-a="resTab" data-v="voos"><span class="q">${ic("ticket","l")}</span>Reservas</button><button data-a="more" data-v="checklist"><span class="q">${ic("check","l")}</span>Checklist</button><button data-a="pdf"><span class="q">${ic("file","l")}</span>PDF</button></div>${homeConv()}`;
   if(noData())return h+`<div class="sec">${emptyState()}</div>`;
   h+=pendBanner(al);
@@ -1259,7 +1303,7 @@ function vRoteiro(){
   rids.forEach(rid=>{const r=ROUTES.find(x=>x.id===rid);if(r)h+=`<button class="rbanner" data-a="route" data-v="${rid}"><span class="pend-ic" style="background:rgba(255,255,255,.22)">${ic("route","l")}</span><span style="flex:1;min-width:0;text-align:left"><b>Hoje: ${esc(r.name)}</b><span class="small" style="display:block;opacity:.9">${routeStats(r).ps.length} paradas na ordem, mapa e dicas</span></span><span class="pend-go">Ver roteiro ${ic("arrow","s")}</span></button>`;});
   const loc=as.filter(a=>hasLoc(a)&&a.kind!=="voo");let km=0;loc.forEach((a,i)=>{if(i){const d=hav(loc[i-1],a);if(d<40)km+=d*1.3;}});
   const cost=as.reduce((s,a)=>s+toBRL(+a.price||0,a.cur),0);
-  h+=`${radarBox(d)}${dayRouteCard(d)}<div class="stats3"><div><small>Paradas</small><b>${as.filter(a=>!["transporte","voo","hotel"].includes(a.kind)).length}</b></div><div><small>Percurso</small><b>${km?kmTxt(km):"—"}</b></div><div><small>Concluído</small><b>${as.filter(a=>a.done).length}/${as.length}</b></div></div>`;
+  h+=`${radarBox(d)}${dayRouteCard(d)}<div class="stats3"><div><small>Paradas</small><b>${as.filter(a=>!["transporte","voo","hotel"].includes(a.kind)).length}</b></div><div><small>Percurso</small><b>${km?kmTxt(km):"—"}</b></div><div><small>Concluído</small><b>${as.filter(a=>a.done).length}/${as.length}</b></div></div>${dayKit(d)}`;
   if(!as.length)h+=`<div class="card empty" style="margin-top:14px">Nada programado ainda. Toque em <b>Ideias para o dia</b> para escolher passeios de ${esc(city)}.</div>`;
   h+=`<div class="tlwrap" id="actList">${as.map(a=>tlItem(a,as)).join("")}</div><p class="small muted">Segure ${ic("grip","s")} e arraste para reordenar. Use ${ic("swap","s")} para mover ou trocar de dia.</p>`;
   return h;
@@ -1271,7 +1315,7 @@ function overview(days){
 }
 function tlItem(a,all){
   const k=KIND[a.kind]||KIND.livre;let extra="";
-  if(a.kind==="voo"&&a.flightId&&S.flights[a.flightId]){const f=S.flights[a.flightId];extra=`<div class="small" style="margin-top:6px;font-weight:600">${f.dep?`Sai ${hm(f.dep)} (${esc(f.frm)})`:"Saída a definir"} · ${f.arr?`chega ${hm(f.arr)}${f.arrDate&&f.arrDate!==f.date?" (+1)":""}`:"chegada a definir"}${f.number?" · "+esc(f.airline+" "+f.number):""}</div><div class="row" style="margin-top:6px;gap:6px">${statusPill(f.status)}${f.pnr?`<span class="pill info">Loc. ${esc(f.pnr)}</span>`:""}</div>`;}
+  if(a.kind==="voo"&&a.flightId&&S.flights[a.flightId]){const f=S.flights[a.flightId];extra=`<div class="small" style="margin-top:6px;font-weight:600">${f.dep?`Sai ${hm(f.dep)} (${esc(f.frm)})`:"Saída a definir"} · ${f.arr?`chega ${hm(f.arr)}${f.arrDate&&f.arrDate!==f.date?" (+1)":""}`:"chegada a definir"}${f.number?" · "+esc(f.airline+" "+f.number):""}</div><div class="row" style="margin-top:6px;gap:6px">${statusPill(f.status)}${f.pnr?`<span class="pill info">Loc. ${esc(f.pnr)}</span>`:""}</div>${f.dep?`<button class="flguide" data-a="more" data-v="voos">${ic("check","s")} ${esc(ckState(f).txt)}${vipFor(f)?` · ${ic("star","s")} ${esc(vipFor(f).short)}`:""} ${ic("chev","s")}</button>`:""}`;}
   if(a.tourId&&S.tours[a.tourId]){const t=S.tours[a.tourId];extra+=`<div class="row" style="margin-top:6px;gap:6px">${statusPill(t.status==="confirmado"?"comprado":t.status)}${t.operator?`<span class="pill info">${esc(t.operator)}</span>`:""}${t.meet?`<span class="small muted">Encontro: ${esc(t.meet)}</span>`:""}</div>`;}
   if(a.kind==="hotel"){const hh=a.hotelId&&S.hotels[a.hotelId]?S.hotels[a.hotelId]:/check-?out|saída/i.test(a.title)?hotelForDate(addDays(a._e.date,-1)):(sleepHotel(a._e.date)||hotelForDate(a._e.date));
     if(hh)extra+=`<div class="hotline">${ic("bed","s")}<span><b>${esc(hh.name&&!/^a definir$/i.test(hh.name)?hh.name:"Hospedagem em "+hh.city)}</b>${hh.address?`<small>${esc(hh.address)}</small>`:""}${!hasLoc(hh)?`<small style="color:var(--coral)">Sem localização: edite a hospedagem e cole o link do Maps</small>`:""}</span>${hasLoc(hh)?`<a class="mini" href="${gmNav({...hh,place:hh.address||hh.name})}" target="_blank" rel="noopener" aria-label="Como chegar na hospedagem">${ic("nav","s")}</a>`:""}</div>`;}
@@ -1635,9 +1679,9 @@ function vGastos(){
 
 /* ===== MAIS ===== */
 function vMais(){
-  if(ui.more){const f={clima:vClima,checklist:vChecklist,docs:vDocs,prep:vPrep,carteira:vWallet,caixinha:vKitty,offline:vOffline,info:vInfo,notas:vNotas,ajustes:vAjustes,exportar:vExportar,creditos:vCreditos,pdfs:vPdfs}[ui.more];if(f)return`<button class="btn sm ghost" data-a="more" data-v="" style="margin:4px 0 12px">${ic("back","s")} Mais</button>`+f();}
+  if(ui.more){const f={clima:vClima,checklist:vChecklist,docs:vDocs,prep:vPrep,voos:vVoos,carteira:vWallet,caixinha:vKitty,offline:vOffline,info:vInfo,notas:vNotas,ajustes:vAjustes,exportar:vExportar,creditos:vCreditos,pdfs:vPdfs}[ui.more];if(f)return`<button class="btn sm ghost" data-a="more" data-v="" style="margin:4px 0 12px">${ic("back","s")} Mais</button>`+f();}
   const ck=checkProgress();
-  const items=[["prep","check","Preparar viagem",`${prepStats().pct}% pronto`],["gastos","wallet","Gastos","Total, por pessoa e acertos"],["caixinha","cash","Caixinha do grupo","Quanto entrou e quanto sobra"],["carteira","users","Documentos de cada um","Para mostrar no aeroporto"],["offline","dl","Usar sem internet","Salvar tudo no aparelho"],["passeios","boat","Passeios","Agenda e radar"],["pdfs","file","PDFs do roteiro",`${pdfList().length} salvo${pdfList().length===1?"":"s"} · gerar novo`],["reservas","ticket","Reservas","Voos e hotéis"],["clima","cloud","Clima e mala","O que vestir em cada cidade"],["checklist","check","Checklist",`${ck.done} de ${ck.total}`],["docs","file","Documentos",`${Object.keys(S.docs).length} arquivos`],["info","info","Informações","Entrada, moeda, segurança"],["notas","note","Anotações","Bloco do grupo"],["mapa","map","Mapa completo","Todos os pontos por cidade"],["exportar","dl","Exportar","Planilha, texto, backup"],["ajustes","gear","Ajustes","Pessoas, câmbio, orçamento"]];
+  const items=[["prep","check","Preparar viagem",`${prepStats().pct}% pronto`],["voos","plane","Voos e aeroportos","Check-in, malas, conexões, sala VIP"],["gastos","wallet","Gastos","Total, por pessoa e acertos"],["caixinha","cash","Caixinha do grupo","Quanto entrou e quanto sobra"],["carteira","users","Documentos de cada um","Para mostrar no aeroporto"],["offline","dl","Usar sem internet","Salvar tudo no aparelho"],["passeios","boat","Passeios","Agenda e radar"],["pdfs","file","PDFs do roteiro",`${pdfList().length} salvo${pdfList().length===1?"":"s"} · gerar novo`],["reservas","ticket","Reservas","Voos e hotéis"],["clima","cloud","Clima e mala","O que vestir em cada cidade"],["checklist","check","Checklist",`${ck.done} de ${ck.total}`],["docs","file","Documentos",`${Object.keys(S.docs).length} arquivos`],["info","info","Informações","Entrada, moeda, segurança"],["notas","note","Anotações","Bloco do grupo"],["mapa","map","Mapa completo","Todos os pontos por cidade"],["exportar","dl","Exportar","Planilha, texto, backup"],["ajustes","gear","Ajustes","Pessoas, câmbio, orçamento"]];
   return`<div class="ph"><div><h1 class="serif">Mais</h1><div class="sub">Organização da viagem</div></div></div><div class="mgrid">${items.map(([k,i,l,s])=>`<button class="mtile" data-a="more" data-v="${k}"><span class="badge">${ic(i,"s")}</span><span><b>${l}</b><br><span class="small muted">${s}</span></span></button>`).join("")}</div>
   <p class="small muted" style="margin-top:18px">Fotos: Wikimedia Commons (licenças livres). Mapas: dados © colaboradores do OpenStreetMap. <button class="see" data-a="more" data-v="creditos" style="background:none;border:0;color:var(--pri);font-weight:700;padding:0">Ver créditos</button></p>`;
 }
@@ -2134,9 +2178,9 @@ function vHoje(){
   else if(as.length)fc=`<div class="hj-done">${ic("check","l")}<div><b>${isToday?"Tudo feito por hoje":"Dia livre"}</b><span>${isToday?"Aproveitem a noite!":"Nada com horário marcado."}</span></div></div>`;
   // voos do dia
   const fl=flightsSorted().filter(f=>f.date===d);
-  const flH=fl.map(f=>{const CO=["BOG","ADZ","CTG","MDE"];const intl=CO.includes(f.frm)!==CO.includes(f.to);const arrive=f.dep?addMin(f.dep,intl?-180:-100).t:"";
+  const flH=fl.map(f=>{const intl=isIntl(f);const arrive=f.dep?addMin(f.dep,-arriveFor(f)).t:"";const st=ckState(f);const vp=vipFor(f);
     return`<div class="hj-fl"><div class="hj-fl1"><div><b>${esc(f.frm)}</b><small>${esc(IATA[f.frm]||"")}</small></div><span>${ic("plane","s")}</span><div><b>${esc(f.to)}</b><small>${esc(IATA[f.to]||"")}</small></div><div class="hj-flt"><b>${f.dep?hm(f.dep):"—"}</b><small>${f.arr?"chega "+hm(f.arr):""}</small></div></div>
-    <div class="hj-fl2">${arrive?`${ic("clock","s")} Estar no aeroporto às <b>${hm(arrive)}</b> (${intl?"internacional: 3h antes":"nacional: 1h40 antes"})`:""}${f.number?` · Voo ${esc(f.number)}`:""}${f.pnr?` · Loc. <b>${esc(f.pnr)}</b>`:""}</div></div>`;}).join("");
+    <div class="hj-fl2">${arrive?`${ic("clock","s")} Estar no aeroporto às <b>${hm(arrive)}</b>`:""}${f.number?` · Voo ${esc(f.number)}`:""}${f.pnr?` · Loc. <b>${esc(f.pnr)}</b>`:""}</div><button class="hj-fl3" data-a="more" data-v="voos"><span>${ic("check","s")} ${esc(st.txt)}${vp?`<br>${ic("star","s")} ${esc(vp.short)} das ${hm(vipWindow(vp).s)} às ${hm(vipWindow(vp).e)}`:""}</span>${ic("chev","s")}</button></div>`;}).join("");
   // lista do dia
   let lastLoc=null;const rows=as.filter(a=>a.kind!=="hotel").map(a=>{const L=hasLoc(a)&&a.kind!=="voo"?legInfo(lastLoc,a,d):null;if(hasLoc(a)&&a.kind!=="voo")lastLoc=a;const legH=L?`<div class="hj-leg ${L.mode}">${legTxt(L)}</div>`:"";const kk=KIND[a.kind]||KIND.passeio;const done=isDone(a);const s=t2m(a._e.time);const past=isToday&&s!=null&&s+(+a.dur||60)<=now.min;
     return`${legH}<div class="hj-row ${a===cur?"cur":""} ${done?"done":""} ${past&&!done?"past":""}"><button class="hj-ck" data-a="hjDone" data-id="${a.id}" aria-label="${done?"Desmarcar":"Marcar como feito"}" aria-pressed="${done}">${done?ic("check","s"):""}</button>
@@ -2148,7 +2192,7 @@ function vHoje(){
   const al=T.phase==="antes"?alerts():[];const pend=al.length?`<button class="hj-pend" data-a="alerts">${ic("alert","s")}<span><b>${al.length} pendência${al.length>1?"s":""}</b> para resolver antes de viajar</span>${ic("chev","s")}</button>`:"";
   return`<div class="hj">${top}${back}${pend}
    <button class="hj-share" data-a="share" data-v="${d}">${ic("share","s")} Mandar este dia</button><div class="hj-wx" data-a="clima" data-v="${esc(city)}" role="button">${ic(vibe[0],"s")} <b>${k.hi}° / ${k.lo}°</b> · ${esc(vibe[1])} · <span>${esc(k.roupas[0].split(" (")[0])}</span>${tv.length<all.length?` · ${ic("heart","s")} ${esc(tv.join(" e "))}`:""}</div>
-   ${fc}${flH}
+   ${fc}${flH}${dayKit(d)}
    <div class="hj-quick"><button data-a="daySheet" data-v="${d}">${ic("map","s")}<span>Mapa do dia</span></button>${dayRouteURL(d,"walking")?`<a href="${dayRouteURL(d,totN>0&&as.some(a=>a.kind==="transporte")?"driving":"walking")}" target="_blank" rel="noopener">${ic("route","s")}<span>Rota no Maps</span></a>`:""}<button data-a="qexp">${ic("wallet","s")}<span>Anotar gasto</span></button><button data-a="hjConv">${ic("cash","s")}<span>Converter</span></button>${rainPlan(d).length?`<button data-a="rain" data-v="${d}">${ic("cloudrain","s")}<span>Plano B chuva</span></button>`:""}</div><button class="mapcta" data-a="fullMap" data-v="${esc(MCITIES.includes(city)?city:"San Andrés")}"><span class="mapcta-i">${ic("map")}</span><span><b>Mapa completo</b><small>Todos os pontos de ${esc(MCITIES.includes(city)?city:"cada cidade")} e da viagem</small></span>${ic("chev","s")}</button>
    <div class="hj-sec"><h2>O dia</h2><span>${doneN}/${totN} feito${totN===1?"":"s"} · toque para trocar ou mover</span></div><div class="hj-list">${rows||'<div class="empty">Nada marcado neste dia.</div>'}</div>
    ${dayRouteCard(d,true)}${hotelH}
@@ -2582,6 +2626,210 @@ function openKittyIn(){kin=kin||{who:ui.me||people()[0],cur:"COP",amount:""};
 async function kittyAdd(whos){const v=+parseNum(($("#kinA")||{}).value);if(!v){toast("Digite o valor");return;}const list=kittyList().slice();const d=todayFor()<TRIP.start||todayFor()>TRIP.end?TRIP.start:todayFor();
   whos.forEach(w=>list.push({id:uid("k"),who:w,amount:v,cur:kin.cur,date:d}));kin=null;closeForm();const ok=await write("meta","kitty",{list});if(ok!==false)toast(whos.length>1?`${whos.length} pessoas colocaram ${fmtCur(v,list[list.length-1].cur,1)}`:`${whos[0]} colocou ${fmtCur(v,list[list.length-1].cur,1)}`);}
 
+
+/* ===== VOOS E AEROPORTOS: check-in, bagagem, conexões, salas VIP, avisos no celular ===== */
+const CO_AP=["BOG","ADZ","CTG","MDE"];
+const isIntl=f=>CO_AP.includes(f.frm)!==CO_AP.includes(f.to);
+const flDepTs=f=>ts(f.date,f.dep,IATA[f.frm]||"Fortaleza");
+const flArrTs=f=>f.arr?ts(f.arrDate||f.date,f.arr,IATA[f.to]||"Fortaleza"):flDepTs(f)+2*36e5;
+function airlineOf(f){const a=(f.airline||"").toLowerCase();if(/avianca/.test(a))return"avianca";if(/latam/.test(a))return"latam";if(/gol/.test(a))return"gol";if(/azul/.test(a))return"azul";return"";}
+const ALN={avianca:"Avianca",latam:"LATAM",gol:"GOL",azul:"Azul"};
+const CKURL={avianca:"https://www.avianca.com/es/tu-reserva/check-in-online/",latam:"https://www.latamairlines.com/br/pt/check-in"};
+const ckURL=f=>CKURL[airlineOf(f)]||`https://www.google.com/search?q=${encodeURIComponent("check-in online "+(f.airline||"")+" voo "+f.frm+" "+f.to)}`;
+function arriveFor(f){const v=vipFor(f);return v?Math.max(arriveMin(f),v.start+(f.frm==="BOG"?40:30)):arriveMin(f);}
+const leaveMin=f=>arriveFor(f)+(f.frm==="BOG"?90:60);
+function arriveMin(f){const al=airlineOf(f);if(isIntl(f))return al==="latam"&&CO_AP.includes(f.frm)?210:180;if(CO_AP.includes(f.frm))return al==="latam"?150:120;return 110;}
+const fmtWhen=(t,city)=>{if(isNaN(t))return"—";const n=new Date(t+tz(city)*36e5);const d=n.toISOString().slice(0,10);return`${WD[wd(d)]} ${dShort(d)} às ${hm(n.toISOString().slice(11,16))}`;};
+function ckState(f){const dep=flDepTs(f);if(isNaN(dep)||!f.dep)return{s:"sem",txt:"Cadastre o horário do voo"};const open=dep-48*36e5,close=dep-(airlineOf(f)==="latam"?120:isIntl(f)?60:45)*6e4;const now=Date.now();
+  if(now>dep)return{s:"foi",txt:"Voo já saiu"};if(now>=close)return{s:"fechou",txt:"Check-in online encerrado: vá ao balcão"};
+  if(now>=open)return{s:"aberto",txt:`Check-in online aberto até ${fmtWhen(close,IATA[f.frm])}`};
+  const h=Math.round((open-now)/36e5);return{s:"breve",txt:`Check-in abre ${fmtWhen(open,IATA[f.frm])}${h<72?` · em ${h<1?"menos de 1h":h+"h"}`:""}`,open};}
+const forMe=(f,p)=>!p||!f.split||!f.split.length||f.split.length===1||f.split.includes(p);
+
+/* ---------- conexões ---------- */
+function connections(){const fl=flightsSorted().filter(f=>f.dep);const out=[];for(let i=1;i<fl.length;i++){const a=fl[i-1],b=fl[i];if(a.to!==b.frm)continue;const gap=Math.round((flDepTs(b)-flArrTs(a))/6e4);if(gap>0&&gap<20*60)out.push({a,b,gap,sep:!(a.pnr&&a.pnr===b.pnr),immig:isIntl(a),exitC:isIntl(b),ap:a.to});}return out;}
+function connSteps(c){const city=IATA[c.ap];const A=c.a,B=c.b;const t0=A.arr;const at=m=>hm(addMin(t0,m).t);const dep=m=>hm(addMin(B.dep,-m).t);const S_=[];
+  S_.push([at(0),"Pouso em "+city,`${A.frm} → ${A.to}${tz(IATA[A.frm])!==tz(city)?` · ajustem o relógio ${Math.abs(tz(IATA[A.frm])-tz(city))}h para trás`:""}`]);
+  if(c.exitC&&!CO_AP.includes(B.frm)){
+    S_.push([at(10),"Saiam para o saguão","Sem hotel: a espera é no lado de fora até o check-in internacional abrir. Lugar com tomada perto do café ajuda."]);
+    S_.push([dep(arriveFor(B)),"Check-in internacional",`${ALN[airlineOf(B)]||"Balcão da companhia"}: despachem a mala (se tiver) e peguem o cartão de embarque. Com check-in online e só mala de mão, dá para ir direto à PF.`]);
+    S_.push([dep(arriveFor(B)-15),"Polícia Federal (emigração)","Passaporte ou RG original. Depois, raio-x."]);
+    const v=vipFor(B);if(v)S_.push([dep(v.start)+"–"+dep(v.start-v.dur),"Sala VIP: "+v.short,v.what+" Máximo de 3h."]);
+    S_.push([dep(40),"Portão de embarque",`Voo ${B.frm} → ${B.to} sai ${hm(B.dep)}${B.arr?`, chega ${hm(B.arr)} (hora de ${IATA[B.to]})`:""}. Na chegada, atrasem o relógio ${Math.abs(tz(IATA[B.frm])-tz(IATA[B.to]))}h.`]);
+    return S_;}
+  if(c.gap>=8*60){
+    S_.push([at(30),"Malas",c.sep?"Bilhetes separados: retirem as malas na esteira. Se não der para despachar tão cedo, procurem o guarda-volumes (pergunte no balcão de informações; confirme preço).":"Se a mala já foi despachada até o destino final, saiam só com a bagagem de mão."]);
+    const as=actsOfDay(A.arrDate||A.date).filter(x=>!["voo","hotel","transporte"].includes(x.kind)&&x._e.time&&t2m(x._e.time)>t2m(A.arr)&&t2m(x._e.time)<t2m(B.dep)-240);
+    if(as.length)S_.push([hm(as[0]._e.time)+"–"+hm(as[as.length-1]._e.time),"Dia na cidade",as.map(x=>x.title).slice(0,5).join(" · ")||"Passeio pela cidade"]);
+    S_.push([dep(leaveMin(B)),"Saiam para o aeroporto","Sexta à tarde tem trânsito pesado em Bogotá: até 1h de Uber."]);
+    S_.push([dep(arriveFor(B)),"Check-in e despacho",`${ALN[airlineOf(B)]||"Balcão da companhia"}, embarque internacional. Passaporte/RG em mãos.`]);
+    if(c.exitC)S_.push([dep(arriveFor(B)-20),"Migração de saída","Passaporte ou RG. O Check-MIG (de 72h a 1h antes) é recomendado para agilizar."]);
+    const v=vipFor(B);if(v)S_.push([dep(v.start),"Sala VIP: "+v.short,v.what]);
+    S_.push([dep(45),"Portão de embarque",`Voo ${B.frm} → ${B.to} sai ${hm(B.dep)}${B.arr?`, chega ${hm(B.arr)} (hora de ${IATA[B.to]})`:""}.`]);
+  }else{
+    if(c.immig)S_.push([at(15)+"–"+at(60),"Imigração (Migración Colombia)","Passaporte ou RG. A fila pode levar de 20 a 60 min. Check-MIG feito ajuda (é recomendado)."]);
+    S_.push([at(c.immig?60:20),c.sep?"Retirar e despachar de novo":"Mala",c.sep?`Os voos estão em reservas diferentes${A.pnr||B.pnr?` (${[A.pnr,B.pnr].filter(Boolean).join(" e ")})`:""}: peguem a mala na esteira, passem pela alfândega e levem ao balcão ${ALN[airlineOf(B)]||"da companhia do próximo voo"} (voo nacional).`:"Em conexão internacional → nacional na Colômbia, a mala costuma sair na alfândega e ser entregue de novo na esteira de conexão logo depois. Confirmem no balcão em Belém."]);
+    if(B.to==="ADZ")S_.push([at(c.immig?75:30),"Tarjeta de Turismo de San Andrés","Obrigatória para entrar na ilha: COP 153.000 por pessoa (2026), comprada no aeroporto de origem, no balcão da companhia, antes de embarcar. Guardem: pedem na chegada e na saída."]);
+    S_.push([dep(110),"Despachar a mala no voo nacional",`Façam com folga: o balcão fecha às ${hm(addMin(B.dep,airlineOf(B)==="latam"?-60:-45).t)} e depois disso não embarcam.`]);
+    S_.push([dep(90)+"–"+dep(45),"Raio-x e almoço rápido","Comam no lado de dentro, perto do portão."]);
+    S_.push([dep(40),"Embarque",`Voo ${B.frm} → ${B.to} sai ${hm(B.dep)}.`]);}
+  return S_;}
+
+/* ---------- salas VIP ---------- */
+const VIPS=[
+ {ap:"FOR",date:"2026-11-16",short:"Sala VIP Inter",name:"Sala VIP Inter · Fortaleza",start:120,dur:80,
+  where:"Embarque doméstico, depois do raio-x: passe pela loja Dufry; fica ao lado da W Premium Lounge.",hours:"Todos os dias, das 6h às 22h",
+  access:["Inter Prime e Inter Win: grátis e ilimitado","Outros clientes Inter: 4.000 pontos Loop por acesso","Entrada com o QR Code gerado no app do Inter + cartão de embarque","Acompanhante (Inês): confirmem no app do Inter antes de ir"],
+  what:"Bufê quente e frio, bar com bebidas (inclusive alcoólicas), ducha com amenidades sem custo.",
+  tip:"Comam aqui antes do voo de 17h20: a próxima refeição só em Belém, de madrugada.",
+  alt:"Se a sala estiver lotada: W Premium Lounge, ao lado (Priority Pass/LoungeKey).",
+  src:[["Melhores Destinos","https://www.melhoresdestinos.com.br/milhas/sala-vip-inter-fortaleza"],["CNN Brasil","https://www.cnnbrasil.com.br/economia/negocios/inter-inaugura-sala-vip-no-aeroporto-de-fortaleza/"]]},
+ {ap:"BEL",date:"2026-11-17",short:"W Lounge Belém",name:"W Lounge · Belém",start:165,dur:125,
+  where:"Lado internacional: logo em frente ao controle da Polícia Federal, perto do portão 10. Atende doméstico e internacional.",hours:"24 horas · permanência máxima de 3 horas",
+  access:["Priority Pass, LoungeKey e Visa Airport Companion (DragonPass)","Inter: o Priority Pass vale para Inter Prime (6 acessos por ano) e Inter Win (ilimitado)","Itaú Uniclass (Mastercard Black ou Visa Infinite): 4 acessos por ano pelo app Itaú (DragonPass). O QR é nominal, vale 7 dias e o nome tem que ser igual ao do cartão de embarque","No app Itaú, busque “Belém” em Sala VIP para confirmar que o W Lounge aparece antes de gerar o QR"],
+  what:"Bufê com opções frias e quentes. Tem chuveiro, mas é cobrado à parte.",
+  tip:"Vocês chegam de Fortaleza à 1h30 e saem do lado doméstico. O check-in internacional abre por volta das 5h: despachem, passem pela PF e entrem às 5h45. Com o limite de 3h, dá até a hora do embarque. Levem a nécessaire e uma muda de roupa na mochila para o banho.",
+  alt:"Plano B: Amazon VIP Lounge (perto do portão 1, Priority Pass/LoungeKey ou avulso por ~R$ 150): bebidas e petiscos, sem banho anunciado.",
+  src:[["Priority Pass · W Lounge Belém","https://www.prioritypass.com/pt-BR/lounges/brazil/val-de-cans-international/bel1-w-lounge-belem"],["Melhores Destinos · salas de Belém","https://www.melhoresdestinos.com.br/sala-vip-aeroporto-de-belem.html"],["Regulamento Sala VIP Uniclass","https://www.itau.com.br/media/dam/m/2553772cc932bdfb/original/Regulamento-Sala-VIP-Uniclass-15122025.pdf"]]},
+ {ap:"BOG",date:"2026-11-27",short:"Copa Club (internacional)",name:"Jantar na sala VIP · El Dorado",start:220,dur:110,
+  where:"Terminal internacional, depois da migração. Copa Club: perto do portão A6. El Dorado Lounge by Mastercard: em frente ao portão A8.",hours:"Copa Club: 3h às 21h30 · El Dorado Lounge: 24h (máx. 6h)",
+  access:["Copa Club: Priority Pass (Inter Prime/Win). Entrem até umas 19h30 para jantar com calma: fecha às 21h30","El Dorado Lounge by Mastercard: cartões Mastercard elegíveis (ex.: Itaú Uniclass Mastercard Black). Bufê e chuveiro são cobrados à parte","No app Itaú (DragonPass), confira quais salas de Bogotá aparecem para o seu cartão"],
+  what:"Copa Club: a página do Priority Pass só lista bebidas, então confirmem se há comida quente para jantar. El Dorado Lounge: bufê e banho pagos à parte.",
+  tip:"Com voo às 23h05: saiam da cidade até umas 17h15, check-in por volta de 18h45, migração e sala VIP das 19h25 às 21h15. Portão às 22h20.",
+  alt:"Se não der a sala: a praça de alimentação do embarque internacional funciona até tarde.",
+  src:[["Priority Pass · Copa Club BOG","https://www.prioritypass.com/pt-BR/lounges/colombia/el-dorado-international/bog10-copa-club-international-departures"],["Mastercard · El Dorado Lounge","https://airport.mastercard.com/pt/lounge-finder/lounge?loungecode=BOG9"]]}];
+function vipFor(f){return VIPS.find(v=>v.ap===f.frm&&v.date===f.date)||null;}
+function vipWindow(v){const f=flightsSorted().find(x=>x.frm===v.ap&&x.date===v.date&&x.dep);if(!f)return null;const s=addMin(f.dep,-v.start).t,e=addMin(f.dep,-v.start+v.dur).t;return{f,s,e};}
+function vipCard(v,open){const w=vipWindow(v);return`<details class="vip" ${open?"open":""}><summary><span class="vip-ic">${ic("star","s")}</span><span class="vip-h"><b>${esc(v.name)}</b><small>${dShort(v.date)}${w?` · ${hm(w.s)} às ${hm(w.e)} · antes do voo das ${hm(w.f.dep)}`:""}</small></span>${ic("chev","s")}</summary>
+  <div class="vip-b"><div class="vip-r">${ic("pin","s")}<span>${esc(v.where)}</span></div><div class="vip-r">${ic("clock","s")}<span>${esc(v.hours)}</span></div>
+  <div class="vip-r">${ic("food","s")}<span>${esc(v.what)}</span></div>
+  <div class="eyebrow" style="margin:10px 0 4px">Como entrar</div>${v.access.map(t=>`<div class="vip-li">${esc(t)}</div>`).join("")}
+  <div class="tip" style="margin-top:10px">${ic("info","s")} ${esc(v.tip)}</div><p class="small muted" style="margin-top:8px">${esc(v.alt)}</p>
+  <p class="small muted" style="margin-top:6px">Fontes: ${v.src.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}. Regras mudam: confirme no app do banco na véspera.</p></div></details>`;}
+
+/* ---------- tela ---------- */
+function flCard(f){const st=ckState(f);const intl=isIntl(f);const v=vipFor(f);const al=ALN[airlineOf(f)]||f.airline||"";
+  return`<div class="fcard ${st.s}"><div class="fc-top"><div><b>${esc(f.frm)} → ${esc(f.to)}</b><small>${WD[wd(f.date)]} ${dShort(f.date)} · ${f.dep?hm(f.dep):"—"}${f.arr?` → ${hm(f.arr)}${f.arrDate&&f.arrDate!==f.date?" (+1)":""}`:""}${al?" · "+esc(al):""}${f.number?" "+esc(f.number):""}</small></div><span class="pill ${intl?"info":""}">${intl?"Internacional":"Nacional"}</span></div>
+  <div class="fc-row"><span class="fc-k">${ic("check","s")} Check-in</span><span class="fc-v ${st.s}">${esc(st.txt.replace(/^Check-in (online )?/,"").replace(/^./,c=>c.toUpperCase()))}</span></div>
+  ${st.s==="aberto"||st.s==="breve"?`<a class="btn sm ${st.s==="aberto"?"pri":""} block" style="margin:6px 0 2px" href="${ckURL(f)}" target="_blank" rel="noopener">${ic("arrow","s")} Fazer check-in${al?" na "+esc(al):""}${f.pnr?` · loc. ${esc(f.pnr)}`:""}</a>`:""}
+  <div class="fc-row"><span class="fc-k">${ic("clock","s")} No aeroporto</span><span class="fc-v">${f.dep?`até ${hm(addMin(f.dep,-arriveFor(f)).t)} (${Math.floor(arriveFor(f)/60)}h${arriveFor(f)%60?String(arriveFor(f)%60).padStart(2,"0"):""} antes${arriveFor(f)>arriveMin(f)?", com sala VIP":""})`:"—"}</span></div>
+  <div class="fc-row"><span class="fc-k">${ic("bag","s")} Bagagem</span><span class="fc-v">${f.bag?esc(f.bag):`<button class="see" data-a="edit" data-c="flights" data-id="${f.id}">Anotar a franquia</button>`}</span></div>
+  ${f.pnr?`<div class="fc-row"><span class="fc-k">${ic("ticket","s")} Localizador</span><span class="fc-v"><b>${esc(f.pnr)}</b></span></div>`:""}
+  ${intl?`<div class="fc-row"><span class="fc-k">${ic("file","s")} Documentos</span><span class="fc-v">Passaporte ou RG · Check-MIG (recomendado, 72h a 1h antes)</span></div>`:""}
+  ${v?`<div class="fc-row"><span class="fc-k">${ic("star","s")} Sala VIP</span><span class="fc-v">${esc(v.short)}${vipWindow(v)?` · ${hm(vipWindow(v).s)}–${hm(vipWindow(v).e)}`:""}</span></div>`:""}</div>`;}
+let icsWho=null;
+function vVoos(){const fl=flightsSorted();const C=connections();const all=people();const me=icsWho||(all.includes(ui.me)?ui.me:all[0]);icsWho=me;
+  const next=fl.find(f=>f.dep&&flDepTs(f)>Date.now());
+  return`<h1 class="serif">Voos e aeroportos</h1><p class="small muted">Check-in online, bagagem, conexões em Bogotá e salas VIP.</p>
+  <div class="darkc notif" style="margin-top:12px"><span class="eyebrow">${ic("bell","s")} Avisos no celular</span><b style="display:block;font-size:17px;margin:4px 0 4px">Coloque os alertas no calendário do celular</b><span class="small" style="opacity:.88">Abertura de cada check-in (48h antes), hora de sair para o aeroporto, salas VIP, Check-MIG e um resumo de manhã com o dinheiro e a mochila do dia. Funciona sem internet.</span>
+   <div class="chips" style="margin-top:10px">${all.map(n=>`<button class="chip" data-a="icsWho" data-v="${esc(n)}" aria-pressed="${me===n}">${esc(n)}</button>`).join("")}</div>
+   <button class="btn sun block" style="margin-top:10px" data-a="icsDl">${ic("dl","s")} Adicionar avisos de ${esc(me)} ao calendário</button>
+   <div class="small" style="opacity:.75;margin-top:8px">iPhone: toque em “Adicionar tudo”. Android: abra o arquivo com o app de calendário. Se mudar algum horário, baixe de novo.</div></div>
+  ${next?`<div class="eyebrow" style="margin:16px 0 8px">Próximo voo</div>${flCard(next)}`:""}
+  ${C.length?`<div class="eyebrow" style="margin:18px 0 8px">Conexões em ${[...new Set(C.map(c=>IATA[c.ap]))].join(" e ")}</div>${C.map(c=>`<div class="card conn"><div class="between"><div><b>${dShort(c.a.arrDate||c.a.date)} · ${esc(IATA[c.ap])}</b><div class="small muted">${esc(c.a.frm)} → ${esc(c.ap)} → ${esc(c.b.to)}</div></div><span class="pill ${c.gap<4*60?"warn":"info"}">${Math.floor(c.gap/60)}h${c.gap%60?String(c.gap%60).padStart(2,"0"):""} de conexão</span></div>
+   <div class="conn-tags">${c.immig?`<span>${ic("users","s")} Imigração aqui</span>`:""}${c.sep?`<span>${ic("bag","s")} Retirar e despachar a mala</span>`:`<span>${ic("bag","s")} Mesma reserva</span>`}${c.gap>=8*60?`<span>${ic("compass","s")} Dá para sair do aeroporto</span>`:""}</div>
+   <div class="ctl">${connSteps(c).map(([t,h,d])=>`<div class="ctl-i"><span class="ctl-t">${t}</span><div><b>${esc(h)}</b><small>${esc(d)}</small></div></div>`).join("")}</div></div>`).join("")}`:""}
+  <div class="eyebrow" style="margin:18px 0 8px">Salas VIP</div>${VIPS.map((v,i)=>vipCard(v,false)).join("")}
+  <div class="eyebrow" style="margin:18px 0 8px">Todos os voos</div>${fl.map(flCard).join("")}
+  <div class="card" style="margin-top:12px"><h3 style="margin-bottom:6px">Regras de check-in</h3>
+   <div class="li" style="padding:6px 0"><span class="dotc" style="background:var(--pri2)"></span><span class="grow small"><b>Avianca:</b> online de 48h até 1h antes (internacional) ou 45 min (nacional na Colômbia).</span></div>
+   <div class="li" style="padding:6px 0"><span class="dotc" style="background:var(--pri2)"></span><span class="grow small"><b>LATAM:</b> abre 48h antes (às vezes faz sozinha); online até 2h antes. Chegar 3h30 antes em voos internacionais saindo da Colômbia e 2h30 em nacionais de lá.</span></div>
+   <div class="li" style="padding:6px 0"><span class="dotc" style="background:var(--pri2)"></span><span class="grow small"><b>Check-MIG:</b> formulário da Migración Colombia, de 72h a 1h antes de entrar ou sair. Hoje é recomendado (não obrigatório) no avião, mas agiliza.</span></div>
+   <p class="small muted" style="margin-top:6px">Fontes: <a href="https://avianca.com/en/your-booking/online-check-in" target="_blank" rel="noopener">Avianca</a> · <a href="https://www.latamairlines.com/br/pt/central-ajuda/perguntas/check-in/embarque/antecedencia-chegada-aeroporto" target="_blank" rel="noopener">LATAM</a> · <a href="https://www.cronista.com/colombia/actualidad-co/va-a-salir-o-entrar-a-colombia-el-formulario-check-mig-que-migracion-exige-72-horas-antes-del-vuelo/" target="_blank" rel="noopener">Check-MIG</a></p></div>`;}
+
+/* ---------- avisos (.ics) ---------- */
+const icsT=t=>new Date(t).toISOString().replace(/[-:]/g,"").replace(/\.\d+/,"");
+const icsE=s=>String(s||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");
+function icsFold(line){const enc=new TextEncoder();const out=[];let cur="",n=0;for(const ch of line){const b=enc.encode(ch).length;if(n+b>73){out.push(cur);cur=" "+ch;n=1+b;}else{cur+=ch;n+=b;}}out.push(cur);return out.join("\r\n");}
+function icsBuild(p){const ev=[];const add=(uid,start,min,title,desc,alarms)=>{if(isNaN(start))return;ev.push(["BEGIN:VEVENT",`UID:${uid}@colombia2026`,`DTSTAMP:${icsT(Date.now())}`,`DTSTART:${icsT(start)}`,`DTEND:${icsT(start+min*6e4)}`,`SUMMARY:${icsE(title)}`,`DESCRIPTION:${icsE(desc)}`,...alarms.map(([m,t])=>["BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${icsE(t||title)}`,`TRIGGER:${m<0?"-":""}PT${Math.abs(m)}M`,"END:VALARM"].join("\r\n")),"END:VEVENT"].join("\r\n"));};
+  const fl=flightsSorted().filter(f=>f.dep&&forMe(f,p));const C=connections();
+  fl.forEach(f=>{const dep=flDepTs(f);const city=IATA[f.frm];const al=ALN[airlineOf(f)]||f.airline||"";const intl=isIntl(f);
+    add(`ck-${f.id}`,dep-48*36e5,15,`✈ Check-in abre: ${f.frm} → ${f.to}`,`Voo ${f.frm} → ${f.to} em ${dShort(f.date)} às ${hm(f.dep)} (hora de ${city}).${f.pnr?" Localizador "+f.pnr+".":""}${al?" Companhia: "+al+".":""}\nFazer check-in: ${ckURL(f)}${intl?"\nFaçam também o Check-MIG (recomendado), de 72h a 1h antes: https://www.migracioncolombia.gov.co/":""}`,[[0,`Check-in aberto: ${f.frm} → ${f.to}`]]);
+    const cn=C.find(c=>c.b.id===f.id);const vip=vipFor(f);const am=arriveFor(f);const lv=leaveMin(f);
+    const al2=cn&&cn.gap<8*60?[[-90,`Embarque ${f.frm} → ${f.to} em 1h30`]]:f.frm==="BEL"&&f.date==="2026-11-17"?[[-180,"Check-in internacional abrindo: hora de despachar"]]:[[-lv,`Hora de sair para o aeroporto (voo ${hm(f.dep)})`],[-am,`Estar no aeroporto agora (${f.frm})`]];
+    add(`fl-${f.id}`,dep,Math.max(30,Math.round((flArrTs(f)-dep)/6e4)),`✈ Voo ${f.frm} → ${f.to}${al?" · "+al:""}${f.number?" "+f.number:""}`,`Sai ${hm(f.dep)} (${city}), chega ${f.arr?hm(f.arr):"—"} (${IATA[f.to]}).${f.pnr?" Localizador "+f.pnr+".":""}${f.bag?" Bagagem: "+f.bag+".":""}${intl?" Levar passaporte ou RG.":""}`,al2);
+    if(vip){const w=vipWindow(vip);if(w)add(`vip-${f.id}`,ts(f.date,w.s,city),vip.dur,`★ ${vip.name}`,`${vip.where}\n${vip.hours}\n${vip.access.join("\n")}\n${vip.tip}`,[[-15,`${vip.short} daqui a 15 min`]]);}
+    if(f.to==="ADZ"&&cn)add(`tarjeta-${f.id}`,flArrTs(cn.a)+60*6e4,20,"Comprar a Tarjeta de Turismo de San Andrés","No balcão da companhia, antes de embarcar para San Andrés. COP 153.000 por pessoa (2026). Guardem: pedem na chegada e na saída.",[[0,"Tarjeta de Turismo: comprem antes de embarcar"]]);});
+  dayList().forEach(d=>{if(!travelersOn(d).includes(p))return;const city=cityOfDay(d);if(city==="Fortaleza")return;const M=dayMoney(d);const B=dayBag(d);
+    add(`bom-${d}`,ts(d,"07:30",city),15,`☀ Dia ${daysBetween(TRIP.start,d)+1} · ${city}: dinheiro e mochila`,`${M.total?`Dinheiro do dia (por pessoa, estimado): ${M.cur==="COP"?"COP "+Math.round(M.total/1000)+" mil (≈ "+brlR(M.total)+")":"R$ "+Math.round(M.total)}${M.cash?". Em espécie: "+(M.cur==="COP"?"COP "+Math.round(M.cash/1000)+" mil":"R$ "+Math.round(M.cash)):""}.\n`:""}Mochila: ${B.map(b=>b.t).join(", ")}.`,[[0,`Dia ${daysBetween(TRIP.start,d)+1}: confira dinheiro e mochila`]]);});
+  return["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Colombia 2026//PT-BR","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Colômbia 2026",...ev,"END:VCALENDAR"].map(l=>l.split("\r\n").map(icsFold).join("\r\n")).join("\r\n");}
+async function icsDownload(){const p=icsWho||ui.me||people()[0];const txt=icsBuild(p);const name=`avisos-colombia-${(p||"grupo").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()}.ics`;const blob=new Blob([txt],{type:"text/calendar;charset=utf-8"});
+  if(downloads){try{const r=await downloads.save({filename:name,data:blob});if(r&&r.status==="saved")toast("Arquivo baixado: abra para adicionar ao calendário");}catch(e){if(e&&e.code!=="cancelled"&&e.code!=="declined")toast("Não deu para baixar aqui");}return;}
+  try{const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),6e4);toast("Abra o arquivo para adicionar ao calendário");}catch(e){toast("Download indisponível nesta visualização");}}
+
+/* ---------- dinheiro do dia ---------- */
+const MEAL={"San Andrés":{cur:"COP",l:55000,j:70000,s:15000},"Cartagena":{cur:"COP",l:50000,j:75000,s:15000},"Medellín":{cur:"COP",l:35000,j:55000,s:12000},"Guatapé":{cur:"COP",l:35000,j:55000,s:12000},"Bogotá":{cur:"COP",l:35000,j:55000,s:12000},"Belém":{cur:"BRL",l:55,j:70,s:15}};
+const TIERV={COP:{"$":25000,"$$":55000,"$$$":100000},BRL:{"$":30,"$$":70,"$$$":120}};
+function whereAt(t){let city="Fortaleza";for(const f of flightsSorted()){if(!f.dep)continue;const a=flDepTs(f),b=flArrTs(f);if(t>=a&&t<b)return{air:true,f};if(b<=t)city=IATA[f.to]||city;}return{air:false,city};}
+function dayMoney(d){const items=[];const tv=travelersOn(d);const n=Math.max(1,tv.length);const dc=cityOfDay(d);const as=actsOfDay(d);
+  const lounge=as.filter(a=>/sala vip/i.test(a.title)&&a._e.time).map(a=>[t2m(a._e.time),t2m(a._e.time)+(+a.dur||90)]);
+  const meal=(k,hh,lbl)=>{const tt=ts(d,hh,dc);const w=whereAt(tt);if(w.air||!w.city||w.city==="Fortaleza")return;const M=MEAL[w.city];if(!M)return;const mm=t2m(hh);if(lounge.some(([s,e])=>mm>=s-30&&mm<=e+30)){items.push({t:lbl+" na sala VIP",v:0,c:M.cur,g:"Comida",note:"incluído"});return;}
+    const ca=as.find(a=>a.kind==="comida"&&a._e.time&&Math.abs(t2m(a._e.time)-mm)<=100&&!/sala vip/i.test(a.title));const tier=ca&&PLACE[ca.placeId]&&TIERV[M.cur][String(PLACE[ca.placeId].price).replace(/^Consumação\s*/,"")];
+    items.push({t:ca?(new RegExp("^"+lbl,"i").test(ca.title)?ca.title:`${lbl}: ${ca.title}`):lbl,v:tier||M[k],c:M.cur,g:"Comida",note:tier?"pela faixa de preço":"estimado"});};
+  meal("l","12:30","Almoço");meal("j","19:30","Jantar");
+  const ground=["09:00","12:30","16:00","20:00"].some(h=>{const w=whereAt(ts(d,h,dc));return!w.air&&w.city!=="Fortaleza";});const M0=MEAL[dc];
+  if(ground&&M0)items.push({t:"Água, lanches e sorvete",v:M0.s,c:M0.cur,g:"Comida",cash:true,note:"estimado"});
+  const seenT=new Set();
+  as.forEach(a=>{if(a.tourId&&S.tours[a.tourId]){const t=S.tours[a.tourId];if(seenT.has(a.tourId))return;seenT.add(a.tourId);if(t.pay==="pago")return;const v=+t.price;items.push({t:`Passeio: ${t.title}`,v:v?(t.perPerson?v:v/n):0,c:t.cur||"COP",g:"Passeios",note:v?"a pagar":"valor não cadastrado"});return;}
+    const p=PLACE[a.placeId];if(!p||a.kind==="comida")return;const pr=String(p.price||"");const m=pr.match(/COP\s*([\d.]+)/);
+    if(m){const v=+m[1].replace(/\./g,"");items.push({t:`${p.id==="md-metrocable"?"Metrô/Metrocable (ida e volta)":"Entrada: "+p.name}`,v:p.id==="md-metrocable"?v*2:v,c:"COP",g:"Entradas",cash:true,note:/confirm/i.test(pr)?"confirmar":""});return;}
+    if(/^Pago|Entrada paga|Entrada simbólica|Teleférico|Visita guiada paga|tarifa própria/i.test(pr))items.push({t:`Entrada: ${p.name}`,v:MEAL[p.city]&&MEAL[p.city].cur==="BRL"?25:25000,c:MEAL[p.city]&&MEAL[p.city].cur||"COP",g:"Entradas",note:"valor a confirmar"});
+    if(/taxa/i.test(pr)&&p.boat)items.push({t:`Taxas: ${p.name}`,v:20000,c:"COP",g:"Taxas",cash:true,note:"em espécie, confirmar"});
+    if(a.kind==="noite"&&TIERV.COP[pr]&&(MEAL[p.city]||{}).cur==="COP")items.push({t:a.title,v:TIERV.COP[pr],c:"COP",g:"Comida",note:"pela faixa de preço"});});
+  const R=routeSum(d);if(R.cost&&!BRCITY.includes(dc)){items.push({t:`Táxi/Uber (${R.taxi} corrida${R.taxi>1?"s":""}, dividido por ${n})`,v:R.cost/n,c:"COP",g:"Transporte",cash:/San Andrés|Cartagena/.test(dc),note:/San Andrés|Cartagena/.test(dc)?"em espécie":"Uber no cartão"});}
+  if(BRCITY.includes(dc)&&dc!=="Fortaleza"){const L=dayLegs(d).filter(x=>x.mode==="taxi");if(L.length){const v=L.reduce((s,x)=>s+Math.round((6+2.6*x.km*1.3)/5)*5,0);items.push({t:`Uber/99 (${L.length} corrida${L.length>1?"s":""}, dividido por ${n})`,v:v/n,c:"BRL",g:"Transporte",note:"estimado"});}}
+  if(d==="2026-11-17"&&flightsSorted().some(f=>f.date===d&&f.to==="ADZ"))items.push({t:"Tarjeta de Turismo de San Andrés",v:153000,c:"COP",g:"Taxas",note:"se ainda não compraram"});
+  const cur=(MEAL[dc]||{}).cur||(items[0]&&items[0].c)||"COP";const conv=(v,c)=>c===cur?v:cur==="COP"?toBRL(v,c)/rate("COP"):toBRL(v,c);
+  items.forEach(i=>i.vv=conv(i.v,i.c));const sum=items.reduce((s,i)=>s+i.vv,0);const cash=items.filter(i=>i.cash).reduce((s,i)=>s+i.vv,0);
+  const r=v=>cur==="COP"?Math.ceil(v/10000)*10000:Math.ceil(v/10)*10;const spent=lines().filter(l=>l.date===d&&l.src==="expenses").reduce((s,l)=>s+l.brl,0);
+  return{items,cur,n,tv,total:sum?r(sum*1.15):0,cash:cash?r(cash*1.2):0,spent};}
+const mFmt=(v,c)=>c==="COP"?`COP ${v>=1000?Math.round(v/1000)+" mil":Math.round(v)}`:`R$ ${Math.round(v)}`;
+function openMoney(d){const M=dayMoney(d);const city=cityOfDay(d);const groups=[...new Set(M.items.map(i=>i.g))];
+  openSheet(`<div class="between" style="margin-bottom:10px"><span class="eyebrow">Dinheiro do dia · ${WD[wd(d)]} ${dShort(d)}</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div>
+  ${M.total?`<div class="darkc"><span class="eyebrow">Leve por pessoa (estimado)</span><div class="v num">${mFmt(M.total,M.cur)}</div><div class="small" style="opacity:.85">${M.cur==="COP"?"≈ "+brlR(M.total)+" · ":""}${M.cash?`em espécie, pelo menos ${mFmt(M.cash,M.cur)}`:"dá para pagar quase tudo no cartão"} · ${esc(city)}</div></div>`:`<div class="card empty">Nada para pagar neste dia. ${city==="Fortaleza"?"Vocês estão em casa.":""}</div>`}
+  ${groups.map(g=>`<div class="eyebrow" style="margin:14px 0 6px">${g}</div><div class="card">${M.items.filter(i=>i.g===g).map(i=>`<div class="li" style="padding:7px 0"><span class="grow small"><b>${esc(i.t)}</b>${i.note?`<br><span class="muted">${esc(i.note)}</span>`:""}</span><span class="num" style="font-weight:800">${i.v?mFmt(i.vv,M.cur):"—"}</span></div>`).join("")}</div>`).join("")}
+  ${M.spent?`<div class="tip" style="margin-top:12px">${ic("wallet","s")} Já anotado em gastos neste dia: <b>${fmtBRL(M.spent)}</b> (grupo).</div>`:""}
+  <p class="small muted" style="margin-top:10px">Soma de refeições, passeios ainda não pagos, entradas, táxi do roteiro e taxas, com 15% de folga. Restaurantes na Colômbia já cobram 10% de serviço (é voluntário). Câmbio: COP 10.000 ≈ ${brlR(10000)}.</p>
+  <button class="btn block" style="margin-top:10px" data-a="bag" data-v="${d}">${ic("bag","s")} Ver a mochila do dia</button>`);}
+
+/* ---------- mochila do dia ---------- */
+let bagDone={};try{bagDone=JSON.parse(localStorage.getItem("nv26-bag")||"{}");}catch(e){}
+const BSTOP=new Set(["do","de","da","das","dos","o","a","e","ou","code","para","com","no","na","um","uma","em"]);
+const bagKey=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\(.*?\)/g,"").replace(/[^a-z ]/g," ").trim().split(/\s+/).filter(w=>w&&!BSTOP.has(w)).slice(0,2).join(" ");
+function dayBag(d){const as=actsOfDay(d);const city=cityOfDay(d);const ps=as.map(a=>PLACE[a.placeId]).filter(Boolean);const out=[];const seen=new Set();
+  const TOK=[/check-?mig/i,/tarjeta/i,/qr (code )?da sala|sala vip/i,/n[ée]cessaire/i];const add=(t,why,ic_)=>{const tk=TOK.find(r=>r.test(t));if(tk&&out.some(o=>tk.test(o.t)))return;const k=bagKey(t);const w0=k.split(" ")[0];if(!k||seen.has(k)||[...seen].some(x=>x.split(" ")[0]===w0&&(x.split(" ").length===1||k.split(" ").length===1)))return;seen.add(k);out.push({t,why,ic:ic_||"bag",k});};
+  const fl=flightsSorted().filter(f=>f.date===d);const txt=as.map(a=>(a.title||"")+" "+(a.place||"")).join(" ");
+  if(fl.length){add("Cartão de embarque no celular","voo","plane");add("Fone e casaco para o avião","voo","plane");}
+  if(fl.some(isIntl))add("Passaporte ou RG original","voo internacional","file");
+  if(fl.some(isIntl))add("QR do Check-MIG (recomendado)","voo internacional","file");
+  if(fl.some(f=>f.to==="ADZ"))add("Tarjeta de Turismo (comprar antes de embarcar)","San Andrés","ticket");
+  if(fl.some(f=>f.frm==="ADZ"))add("Tarjeta de Turismo (pedem na saída)","San Andrés","ticket");
+  as.forEach(a=>String(a.bring||"").split(/,|;| e (?=[A-ZÁÉÍÓÚ])/).map(s=>s.trim()).filter(Boolean).forEach(s=>add(s.charAt(0).toUpperCase()+s.slice(1),a.title,"bag")));
+  if(as.some(a=>/sala vip/i.test(a.title))){add("App do banco com o QR da sala VIP","sala VIP","star");if(city==="Belém"||d==="2026-11-17")add("Nécessaire e muda de roupa para o banho","sala VIP","star");}
+  const beach=ps.some(p=>p.cat==="praia")||/praia|playa|cayo|piscinita/i.test(txt);const boat=ps.some(p=>p.boat)||as.some(isBoatAct);const snork=/snorkel|mergulho|buceo|rocky|west view|piscinita|acuario|mantarraya/i.test(txt);
+  if(beach||boat){add("Roupa de banho","praia","sun");add("Toalha ou canga","praia","sun");add("Chinelo","praia","sun");}
+  if(boat){add("Bolsa estanque para o celular","lancha","boat");add("Remédio para enjoo (se costuma enjoar)","lancha","boat");}
+  if(snork){add("Máscara de snorkel","mergulho","wave");add("Sapatilha de água","mergulho","wave");}
+  if(/mule/i.test(txt))add("CNH para dirigir o mule","mule","car");
+  if(["San Andrés","Cartagena","Belém"].includes(city)){add("Protetor solar","sol forte","sun");add("Óculos de sol e boné","sol forte","sun");}
+  if(city==="Bogotá"){add("Casaco quente (8 a 19 °C)","Bogotá","shirt");add("Guarda-chuva ou capa","Bogotá","cloudrain");}
+  if(city==="Medellín"){add("Casaco leve para a noite","Medellín","shirt");add("Guarda-chuva pequeno","chuva à tarde","cloudrain");}
+  if(city==="Belém")add("Guarda-chuva (chuva rápida à tarde)","Belém","cloudrain");
+  const R=routeSum(d);if(R.walkKm>4)add("Tênis confortável",`~${Math.round(R.walkKm)} km a pé`,"nav");
+  if(as.some(a=>a.kind==="noite"))add("À noite: cópia do documento e pouco dinheiro","noite","moon");
+  if(city!=="Fortaleza"){add("Celular e carregador portátil","todo dia","bolt");add("Dinheiro do dia e um cartão","todo dia","cash");add("Garrafa de água","todo dia","bag");}
+  return out;}
+function bagCount(d){const B=dayBag(d);const m=bagDone[d]||{};return{n:B.filter(b=>m[b.k]).length,t:B.length};}
+function toggleBag(d,k){bagDone[d]=bagDone[d]||{};bagDone[d][k]=!bagDone[d][k];try{localStorage.setItem("nv26-bag",JSON.stringify(bagDone));}catch(e){}const el=document.querySelector(`.bagi[data-v="${CSS.escape(k)}"]`);if(el){const on=!!bagDone[d][k];el.setAttribute("aria-checked",on);el.classList.toggle("on",on);}const c=bagCount(d);const h=$("#bagN");if(h)h.textContent=`${c.n} de ${c.t}`;}
+function openBag(d){const B=dayBag(d);const m=bagDone[d]||{};const c=bagCount(d);
+  openSheet(`<div class="between" style="margin-bottom:10px"><span class="eyebrow">Mochila do dia · ${WD[wd(d)]} ${dShort(d)}</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div>
+  <h2 class="serif" style="font-size:26px;line-height:1.1">${ic("bag")} O que levar hoje</h2><p class="small muted" style="margin:4px 0 12px">Pelo roteiro de ${esc(cityOfDay(d))}. <b id="bagN">${c.n} de ${c.t}</b> na mochila. Toque para marcar.</p>
+  <div class="card">${B.map(b=>`<button type="button" class="bagi ${m[b.k]?"on":""}" role="checkbox" aria-checked="${!!m[b.k]}" data-a="bagCk" data-id="${d}" data-v="${esc(b.k)}"><span class="cbox">${ic("check","s")}</span><span class="grow"><b>${esc(b.t)}</b><small>${esc(b.why)}</small></span></button>`).join("")||'<div class="empty small">Nada especial neste dia.</div>'}</div>
+  <button class="btn block" style="margin-top:12px" data-a="money" data-v="${d}">${ic("cash","s")} Ver o dinheiro do dia</button>`);}
+function dayKit(d){if(cityOfDay(d)==="Fortaleza"&&!flightsSorted().some(f=>f.date===d))return"";const M=dayMoney(d);const c=bagCount(d);
+  return`<div class="kit"><button data-a="money" data-v="${d}"><span class="kit-i">${ic("cash","s")}</span><span><small>Dinheiro do dia</small><b>${M.total?mFmt(M.total,M.cur):"—"}</b><em>${M.total?`por pessoa${M.cash?` · ${mFmt(M.cash,M.cur)} em espécie`:""}`:"nada a pagar"}</em></span></button>
+  <button data-a="bag" data-v="${d}"><span class="kit-i">${ic("bag","s")}</span><span><small>Mochila do dia</small><b>${c.t} itens</b><em>${c.n?`${c.n} já separados`:"toque para conferir"}</em></span></button></div>`;}
+
 /* ---------- formulários ---------- */
 const PAY=["previsto","pendente","pago","parcelado"];const METH=["","cartão","pix","dinheiro","milhas","transferência"];
 const FIELDS={
@@ -2780,6 +3028,11 @@ document.addEventListener("click",async e=>{
    case"docFor":uploadDoc(async(id,doc)=>{await write("docs",id,{...doc,person:v,kind:"Documento pessoal"});render();});break;
    case"ckFor":{const x=S.checks[el.dataset.id];if(!x)break;const done={...(x.done||{})};done[v]=!done[v];write("checks",el.dataset.id,{...x,done});break;}
    case"rain":openRain(v);break;
+   case"money":openMoney(v);break;
+   case"bag":openBag(v);break;
+   case"bagCk":toggleBag(el.dataset.id,v);break;
+   case"icsWho":icsWho=v;render();break;
+   case"icsDl":icsDownload();break;
    case"taxi":closeForm();openTaxi(el.dataset.id);break;
    case"kittyIn":openKittyIn();break;
    case"kittyPay":openQuickExp({payer:"Caixinha"});break;
@@ -2875,4 +3128,5 @@ addEventListener("resize",()=>{if($("#waves"))waves();});
 setInterval(()=>{if(ui.tab==="hoje"&&$("#sheet").hidden&&!document.hidden)render();},60000);
 })();
 </script>
+
 <script>if("serviceWorker" in navigator&&!window.claude)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script></body></html>
