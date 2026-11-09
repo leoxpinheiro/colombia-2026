@@ -861,6 +861,12 @@ button.levar{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}
 .sbar{display:flex;height:9px;border-radius:99px;background:var(--soft);overflow:hidden;margin-top:6px;gap:2px}.sbar span{display:block;height:100%}
 .sleg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:5px;font-size:11.5px;color:var(--muted)}.sleg span{display:inline-flex;align-items:center;gap:4px}.sleg i{width:8px;height:8px;border-radius:3px}
 .pc-del{flex:none;width:38px;height:38px;border-radius:12px;border:0;background:var(--coral-bg);color:var(--coral);display:grid;place-items:center;padding:0;margin-left:2px}
+.qxm{margin-top:8px;border:1.5px dashed var(--line);border-radius:16px;padding:10px 12px;background:var(--card)}
+.qxm.on{border:1.5px solid var(--sun);background:var(--sun-bg)}
+.qxm-h{display:flex;gap:8px;align-items:flex-start}.qxm-h>svg{flex:none;margin-top:2px;color:var(--sun-ink)}
+.qxm-h small{display:block;font-size:11.5px;font-weight:800;color:var(--sun-ink)}.qxm-h b{display:block;font-size:14px;line-height:1.3}.qxm-h span{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-top:3px}
+.qxm-o{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.qxm-o .chip{padding:6px 10px;font-size:12.5px}
+.qxm-t{font-size:12px;color:var(--sun-ink);margin-top:6px}
 </style>
 
 <div class="wrap" id="app" aria-live="polite"></div>
@@ -2540,14 +2546,14 @@ function hcUpdate(){const i=$("#hcA"),o=$("#hcO");if(!i||!o)return;const raw=Str
 const QX_SUG=[["Almoço","Alimentação","🍽️"],["Jantar","Alimentação","🍷"],["Café/lanche","Alimentação","☕"],["Táxi/Uber","Transporte","🚕"],["Mercado","Compras","🛒"],["Ingresso","Passeios","🎟️"],["Passeio","Passeios","⛵"],["Bebidas","Alimentação","🍹"],["Lembrança","Compras","🎁"],["Taxa","Taxas","🧾"]];
 let qx=null;
 function openQuickExp(pre){const d0=pre&&pre.date||(todayFor()<TRIP.start||todayFor()>TRIP.end?(ui.day||TRIP.start):todayFor());const city=cityOfDay(d0);
-  qx={amount:pre&&pre.amount||"",cur:pre&&pre.cur||(["Belém","Fortaleza"].includes(city)?"BRL":"COP"),desc:pre&&pre.desc||"",cat:pre&&pre.cat||"Alimentação",payer:pre&&pre.payer||ui.me||people()[0]||"",split:null,date:d0,method:pre&&pre.method||"",pay:"pago",per:false};renderQuickExp(true);}
+  qx={amount:pre&&pre.amount||"",cur:pre&&pre.cur||(["Belém","Fortaleza"].includes(city)?"BRL":"COP"),desc:pre&&pre.desc||"",cat:pre&&pre.cat||"Alimentação",payer:pre&&pre.payer||ui.me||people()[0]||"",split:null,date:d0,method:pre&&pre.method||"",pay:"pago",per:false,link:null,noLink:[],linkTouched:false};renderQuickExp(true);}
 function qxSplit(){return qx.split||travelersOn(qx.date);}
 function renderQuickExp(first){const sc=first?0:$("#sheetForm").scrollTop;const v=+parseNum(qx.amount)||0;const brl=toBRL(v,qx.cur);const sp=qxSplit();
   openSheet(`<div class="between" style="margin-bottom:10px"><span class="eyebrow">Anotar gasto</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div>
   <div class="qx-amt"><div class="seg qx-cur">${CUR.map(c=>`<button type="button" data-a="qxCur" data-v="${c}" aria-pressed="${qx.cur===c}">${c==="BRL"?"R$":c==="USD"?"US$":"COP"}</button>`).join("")}</div>
    <input id="qxA" inputmode="decimal" placeholder="0" value="${esc(qx.amount)}" autocomplete="off" aria-label="Valor"><div class="qx-brl" id="qxB">${qx.cur!=="BRL"&&v?`≈ ${fmtBRL(brl)}`:qx.cur==="BRL"&&v?`≈ COP ${Math.round(v/rate("COP")).toLocaleString("pt-BR")}`:"&nbsp;"}</div>${qx.cur==="COP"?rateBox("qxRate"):""}</div>
   <div class="eyebrow" style="margin:14px 0 6px">O que foi?</div><div class="chips qx-sug">${QX_SUG.map(([l,c,e])=>`<button type="button" class="chip" data-a="qxSug" data-v="${esc(l)}" aria-pressed="${qx.desc===l}">${e} ${esc(l)}</button>`).join("")}</div>
-  <div class="f" style="margin-top:6px"><input id="qxD" placeholder="Ou escreva: ex. Ceviche no Getsemaní" value="${esc(qx.desc)}" autocomplete="off"></div>
+  <div class="f" style="margin-top:6px"><input id="qxD" placeholder="Ou escreva: ex. Ceviche no Getsemaní" value="${esc(qx.desc)}" autocomplete="off"></div><div id="qxMatch">${qxMatchHTML()}</div>
   <div class="eyebrow" style="margin:14px 0 6px">Categoria</div><div class="chips">${CATS.filter(c=>!["Passagens","Hospedagem"].includes(c)).map(c=>`<button type="button" class="chip" data-a="qxCat" data-v="${esc(c)}" aria-pressed="${qx.cat===c}">${esc(c)}</button>`).join("")}</div>
   <div class="eyebrow" style="margin:14px 0 6px">Quem pagou</div><div class="chips">${[...people(),EACH,"Caixinha"].map(n=>`<button type="button" class="chip" data-a="qxPayer" data-v="${esc(n)}" aria-pressed="${qx.payer===n}">${esc(n===EACH?"Cada um o seu":n)}</button>`).join("")}</div>
   <div class="eyebrow" style="margin:14px 0 6px">Dividir entre <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:600">· ${sp.length?`${fmtBRL(brl/(qx.per?1:sp.length))} cada${qx.per?" (valor por pessoa)":""}`:""}</span></div><div class="chips">${people().map(n=>`<button type="button" class="chip" data-a="qxSplit" data-v="${esc(n)}" aria-pressed="${sp.includes(n)}">${sp.includes(n)?"✓ ":""}${esc(n)}</button>`).join("")}</div>
@@ -2558,8 +2564,8 @@ function renderQuickExp(first){const sc=first?0:$("#sheetForm").scrollTop;const 
   <button type="button" class="btn ghost block sm" style="margin-top:8px" data-a="qxFull">Mais opções (parcelas, observações)</button>`);
   if(!first)$("#sheetForm").scrollTop=sc;else setTimeout(()=>{const i=$("#qxA");if(i)i.focus();},150);}
 function qxRead(){const a=$("#qxA"),d=$("#qxD"),dt=$("#qxDate");if(a)qx.amount=a.value;if(d)qx.desc=d.value;if(dt&&dt.value)qx.date=dt.value;}
-function qxLive(){qxRead();const v=+parseNum(qx.amount)||0;const b=$("#qxB");if(b)b.innerHTML=qx.cur!=="BRL"&&v?`≈ ${fmtBRL(toBRL(v,qx.cur))}`:qx.cur==="BRL"&&v?`≈ COP ${Math.round(v/rate("COP")).toLocaleString("pt-BR")}`:"&nbsp;";}
-async function qxSave(){qxRead();const v=+parseNum(qx.amount);if(!v){toast("Digite o valor");return;}const sp=qxSplit();const def=travelersOn(qx.date);
+function qxLive(){qxRead();qxMatchRefresh();const v=+parseNum(qx.amount)||0;const b=$("#qxB");if(b)b.innerHTML=qx.cur!=="BRL"&&v?`≈ ${fmtBRL(toBRL(v,qx.cur))}`:qx.cur==="BRL"&&v?`≈ COP ${Math.round(v/rate("COP")).toLocaleString("pt-BR")}`:"&nbsp;";}
+async function qxSave(){qxRead();const v=+parseNum(qx.amount);if(!v){toast("Digite o valor");return;}const sp=qxSplit();const def=travelersOn(qx.date);if(qx.link&&qx.pay==="pago"){if(await qxSaveLinked(v,sp))return;}
   const e={desc:qx.desc.trim()||qx.cat,date:qx.date,cat:qx.cat,amount:v,cur:qx.cur,perPerson:qx.per,pay:qx.pay,method:qx.method,inst:"",payer:qx.payer,split:sp.length===def.length&&sp.every(n=>def.includes(n))?[]:sp,notes:""};
   const id=uid("e");closeForm();const ok=await write("expenses",id,e);if(ok!==false)toast(`Gasto salvo: ${e.desc} · ${fmtCur(v,qx.cur)}`,async()=>{await remove("expenses",id);toast("Desfeito");});}
 
@@ -3001,6 +3007,39 @@ function planList(kind,G){const F=finance();const mine=F.L.filter(l=>l.split.inc
   openSheet(`<div class="between" style="margin-bottom:8px"><span class="eyebrow">${esc(G)}</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div>
   <div class="pl-head" style="--c:${color}"><span>${esc(title)}</span><b class="num">${fmtBRL(total)}</b></div>${body}`);}
 
+
+/* ===== GASTO ANOTADO x GASTO PREVISTO: considerar um só ===== */
+const MSTOP=new Set(["de","do","da","das","dos","em","e","a","o","os","as","para","pra","com","no","na","nos","nas","por","pessoa","ida","volta","um","uma","the","extras","extra","estimativa","viagens"]);
+const MSYN={uber:"carro",taxi:"carro",corrida:"carro",corridas:"carro",didi:"carro",indrive:"carro",cabify:"carro",transfer:"carro",traslado:"carro",carro:"carro",onibus:"onibus",bus:"onibus",buseta:"onibus",combuses:"onibus",metro:"metro",metrocable:"metro",civica:"metro",teleferico:"metro",almoco:"comida",jantar:"comida",cafe:"comida",lanche:"comida",comida:"comida",restaurante:"comida",ceviche:"comida",entrada:"entrada",ingresso:"entrada",ingressos:"entrada",tarjeta:"tarjeta",turismo:"tarjeta",hotel:"hosp",hospedagem:"hosp",airbnb:"hosp",acomodacao:"hosp",aeroporto:"aeroporto",passeio:"passeio",tour:"passeio",lancha:"passeio",barco:"passeio",taxa:"taxa",taxas:"taxa"};
+const mTok=s=>new Set(String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").split(/[^a-z0-9]+/).filter(w=>w.length>=3&&!MSTOP.has(w)).map(w=>MSYN[w]||w));
+const AGG=/corridas|passeios|viagens|ida e volta|⇄|e passeios|extras/i;
+function prevMatches(q){const t=mTok(q.desc+" "+(q.cat==="Transporte"&&!/uber|taxi|táxi|ônibus|onibus|metr/i.test(q.desc)?"":""));if(!q.desc||!t.size)return[];const city=cityOfDay(q.date);
+  return lines().filter(l=>l.pay!=="pago"&&l.pay!=="parcelado"&&["expenses","tours","hotels"].includes(l.src)).map(l=>{const src=(S[l.src]||{})[l.id]||{};const lt=mTok(l.desc+" "+(src.city||"")+" "+(PLACE[src.placeId]?PLACE[src.placeId].name:""));
+    let ov=0;t.forEach(w=>{if(lt.has(w))ov++;});const lc=src.city||cityOfDay(l.date);const cm=lc===city;const dd=Math.abs(daysBetween(l.date||q.date,q.date));
+    const sc=ov*3+(l.cat===q.cat?2:0)+(cm?2:0)+(dd<=1?1:0)-(cm?0:3);return{l,src,ov,sc,cm,agg:AGG.test(l.desc)};}).filter(x=>x.ov>=1&&x.sc>=6).sort((a,b)=>b.sc-a.sc).slice(0,2);}
+function qxMatchHTML(){if(!qx||qx.pay!=="pago")return"";const M=prevMatches(qx).filter(m=>!(qx.noLink||[]).includes(m.l.id));
+  if(qx.link&&!M.some(m=>m.l.id===qx.link.id))qx.link=null;
+  if(!M.length)return"";if(!qx.link&&!qx.linkTouched){const m=M[0];qx.link={id:m.l.id,src:m.l.src,mode:m.agg&&m.l.src==="expenses"?"abater":"pago"};}
+  return M.map(m=>{const on=qx.link&&qx.link.id===m.l.id;const canAb=m.l.src==="expenses";return`<div class="qxm ${on?"on":""}"><div class="qxm-h">${ic("sparkle","s")}<div class="grow"><small>Isso já estava previsto?</small><b>${esc(m.l.desc)}</b><span>${statusPill(m.l.pay)} ${fmtCur(m.l.total,m.l.cur,1)} · ${dShort(m.l.date)}</span></div></div>
+   <div class="qxm-o">${canAb?`<button type="button" class="chip" data-a="qxLink" data-v="${m.l.id}|${m.l.src}|abater" aria-pressed="${on&&qx.link.mode==="abater"}">Abater deste previsto</button>`:""}<button type="button" class="chip" data-a="qxLink" data-v="${m.l.id}|${m.l.src}|pago" aria-pressed="${on&&qx.link.mode==="pago"}">É este: marcar como pago</button><button type="button" class="chip" data-a="qxNoLink" data-v="${m.l.id}">É outro</button></div>
+   ${on?`<div class="qxm-t">${qx.link.mode==="abater"?"O valor sai do previsto, que continua com o que sobrar. Não vira gasto a mais.":"O previsto vira este gasto pago, com o valor real."}</div>`:""}</div>`;}).join("");}
+function qxMatchRefresh(){const b=$("#qxMatch");if(b)b.innerHTML=qxMatchHTML();}
+const qxDefSplit=(sp,date)=>{const def=travelersOn(date);return sp.length===def.length&&sp.every(n=>def.includes(n))?[]:sp;};
+async function qxSaveLinked(v,sp){const L=qx.link;const col=L.src;const orig=JSON.parse(JSON.stringify(S[col][L.id]||{}));if(!orig)return false;
+  const ln=lines().find(l=>l.src===col&&l.id===L.id);const desc=qx.desc.trim()||qx.cat;
+  if(L.mode==="pago"){let upd;
+    if(col==="expenses")upd={...orig,amount:v,cur:qx.cur,perPerson:qx.per,pay:"pago",payer:qx.payer,method:qx.method,date:qx.date,split:qxDefSplit(sp,qx.date),notes:((orig.notes||"")+` Previsto: ${fmtCur(orig.amount,orig.cur||"BRL",1)}.`).trim()};
+    else upd={...orig,price:v,cur:qx.cur,perPerson:qx.per,pay:"pago",payer:qx.payer,method:qx.method};
+    closeForm();const ok=await write(col,L.id,upd);if(ok!==false)toast(`Pago: ${ln?ln.desc:desc} · ${fmtCur(v,qx.cur)} (era previsto)`,async()=>{await write(col,L.id,orig);toast("Desfeito");});return true;}
+  // abater
+  const e={desc,date:qx.date,cat:qx.cat,amount:v,cur:qx.cur,perPerson:qx.per,pay:"pago",method:qx.method,inst:"",payer:qx.payer,split:qxDefSplit(sp,qx.date),notes:`Abatido do previsto: ${orig.desc||""}`,of:L.id};
+  const paidBRL=toBRL(v,qx.cur)*(qx.per?sp.length:1);const n0=ln?ln.split.length:1;const leftBRL=(ln?ln.brl:0)-paidBRL;
+  const id=uid("e");closeForm();await write("expenses",id,e);
+  if(leftBRL<=Math.max(1,(ln?ln.brl:0)*0.03)){await remove("expenses",L.id);toast(`Salvo e o previsto “${orig.desc}” acabou`,async()=>{await remove("expenses",id);await write("expenses",L.id,orig);toast("Desfeito");});}
+  else{const r=rate(orig.cur||"BRL")||1;const newAmt=Math.round(leftBRL/r/(orig.perPerson?n0:1)*100)/100;await write("expenses",L.id,{...orig,amount:(orig.cur==="COP"?Math.round(newAmt/100)*100:newAmt)});
+    toast(`Salvo. Sobra no previsto: ${fmtCur(orig.cur==="COP"?Math.round(newAmt/100)*100:newAmt,orig.cur||"BRL",1)}`,async()=>{await remove("expenses",id);await write("expenses",L.id,orig);toast("Desfeito");});}
+  return true;}
+
 /* ---------- formulários ---------- */
 const PAY=["previsto","pendente","pago","parcelado"];const METH=["","cartão","pix","dinheiro","milhas","transferência"];
 const FIELDS={
@@ -3181,6 +3220,8 @@ document.addEventListener("click",async e=>{
    case"qxCur":qxRead();qx.cur=v;renderQuickExp();break;
    case"qxSug":{qxRead();const s=QX_SUG.find(x=>x[0]===v);qx.desc=v;if(s)qx.cat=s[1];renderQuickExp();break;}
    case"qxCat":qxRead();qx.cat=v;renderQuickExp();break;
+   case"qxLink":{qxRead();const[id,src,mode]=v.split("|");qx.linkTouched=true;qx.link=qx.link&&qx.link.id===id&&qx.link.mode===mode?null:{id,src,mode};qxMatchRefresh();break;}
+   case"qxNoLink":{qxRead();qx.noLink=(qx.noLink||[]).concat(v);qx.linkTouched=true;if(qx.link&&qx.link.id===v)qx.link=null;qxMatchRefresh();break;}
    case"qxPayer":qxRead();qx.payer=v;renderQuickExp();break;
    case"qxSplit":{qxRead();const sp=qxSplit().slice();const i=sp.indexOf(v);if(i>=0){if(sp.length>1)sp.splice(i,1);}else sp.push(v);qx.split=people().filter(n=>sp.includes(n));renderQuickExp();break;}
    case"qxPer":qxRead();qx.per=el.checked;renderQuickExp();break;
@@ -3252,7 +3293,7 @@ document.addEventListener("submit",async e=>{if(e.target.id==="lockForm"){e.prev
   s.budget={};CATS.forEach((c,i)=>{s.budget[c]=+parseNum($("#b"+i).value)||0;});
   const ok=await write("meta","settings",s);if(ok)toast("Ajustes salvos");});
 let notesT=null;
-document.addEventListener("input",e=>{if(e.target.id==="qcA")qcUpdate();if(e.target.id==="hcA")hcUpdate();if(e.target.id==="qxA")qxLive();if(e.target.id==="pbTime"){const v=e.target.value;if(v&&$("#pbPer").value!=="d")$("#pbPer").value=perOf(v);planUpdate(false);}
+document.addEventListener("input",e=>{if(e.target.id==="qcA")qcUpdate();if(e.target.id==="hcA")hcUpdate();if(e.target.id==="qxA"||e.target.id==="qxD")qxLive();if(e.target.id==="pbTime"){const v=e.target.value;if(v&&$("#pbPer").value!=="d")$("#pbPer").value=perOf(v);planUpdate(false);}
   if(e.target.id==="notes"){clearTimeout(notesT);const val=e.target.value;notesT=setTimeout(()=>{if(db)db.collection("meta").doc("notes").set({text:val}).then(()=>toast("Anotações salvas"),err=>toast(errText(err)));S.meta.notes={text:val};saveCache();},900);}
   if(e.target.id==="cvA"||e.target.id==="cvC")conv();
   if(e.target.id==="exq"){ui.q=e.target.value;const pw=$("#plistWrap");if(pw){pw.innerHTML=placesBlock();centerMaps(pw);}}
