@@ -1179,7 +1179,7 @@ function draw(){
   const views={hoje:vHoje,home:vHome,roteiro:vRoteiro,passeios:vPasseios,explorar:vExplorar,mapa:vMapa,reservas:vReservas,gastos:vGastos,mais:vMais};
   if(conn==="locked"){$("#app").innerHTML=lockView();$(".nav").hidden=true;$("#cta").hidden=true;$("#tray").hidden=true;return;}
   $(".nav").hidden=false;
-  $("#app").innerHTML=(!navigator.onLine?`<div class="viewbar off">${ic("alert","s")}<span>Sem internet: você está vendo a última versão salva no aparelho.</span></div>`:"")+(conn==="snapshot"?`<div class="viewbar">${ic("info","s")}<span>${window.claude?"Acesso por senha":"Versão de consulta"}: atualizado em${snapAt?" "+new Date(snapAt).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):""}.${window.claude?" Para editar, entre com sua conta Claude.":""} <button class="see" data-a="lockOut" style="font-size:12.5px;color:var(--sun-ink);text-decoration:underline">Sair</button></span></div>`:"")+(views[ui.tab]||vHome)();
+  $("#app").innerHTML=(!navigator.onLine?`<div class="viewbar off">${ic("alert","s")}<span>Sem internet: você está vendo a última versão salva no aparelho.</span></div>`:"")+(conn==="snapshot"?`<div class="viewbar">${ic("info","s")}<span>${window.claude?"Acesso por senha":"Versão de consulta"}: atualizado em${snapAt?" "+new Date(snapAt).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):""}.${window.claude?" Para editar, entre com sua conta Claude.":` <a href="${MAIN_URL}" target="_blank" rel="noopener" style="font-weight:800;color:var(--sun-ink)">Abrir o app principal para editar</a> ·`} <button class="see" data-a="lockOut" style="font-size:12.5px;color:var(--sun-ink);text-decoration:underline">Sair</button></span></div>`:"")+(views[ui.tab]||vHome)();
   $("#nav").innerHTML=[["home","home","Início"],["hoje","sun","Hoje"],["roteiro","list","Roteiro"],["explorar","compass","Explorar"],["mais","grid","Mais"]]
     .map(([k,i,l])=>`<button data-a="tab" data-v="${k}" ${ui.tab===k||(k==="home"&&["passeios","gastos","reservas"].includes(ui.tab))||(k==="explorar"&&ui.tab==="mapa")||(k==="mais"&&ui.tab==="reservas")?'aria-current="page"':""}>${ic(i)}<span>${l}</span></button>`).join("");
   const cta=$("#cta");
@@ -2351,7 +2351,7 @@ function ensureHotelActs(force){if((hotelActsDone&&!force)||conn!=="live"||!db)r
 
 
 /* ===== AÇÕES DE UMA ATIVIDADE (trocar, mover, tirar) + REPETIDOS ===== */
-const SITE_URL="https://leoxpinheiro.github.io/colombia-2026/";
+const SITE_URL="https://leoxpinheiro.github.io/colombia-2026/";const MAIN_URL="https://claude.ai/artifact/BAjzesVj7acKkgqMm1kFbe";
 const NODUP=["voo","hotel","transporte","comida"];
 function dupDays(a){if(!a||!a.placeId||NODUP.includes(a.kind))return[];const d=eff(a).date;return[...new Set(Object.values(S.acts).filter(x=>x!==a&&x.placeId===a.placeId&&eff(x).date&&eff(x).date!==d).map(x=>eff(x).date))].sort();}
 function dupChip(a){const ds=dupDays(a);return ds.length?`<button type="button" class="dupchip" data-a="actMenu" data-id="${a.id}">${ic("alert","s")} Repetido · também ${ds.map(x=>"dia "+(+x.slice(8))).join(", ")}</button>`:"";}
@@ -2880,7 +2880,7 @@ function readForm(){
 /* ---------- gravação ---------- */
 const wq={};
 async function write(col,id,data){
-  if(conn==="snapshot"){toast(window.claude?"Modo visualização. Para editar, entre com sua conta Claude e peça acesso de edição ao Leo.":"Versão de consulta: as mudanças são feitas pelo Leo no app principal.");return false;}
+  if(conn==="snapshot"){if(window.claude){toast("Modo visualização. Para editar, entre com sua conta Claude e peça acesso de edição ao Leo.");return false;}openSheet(`<div class="between" style="margin-bottom:10px"><span class="eyebrow">Versão de consulta</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div><h2 class="serif" style="font-size:26px;line-height:1.15">Para editar, use o app principal</h2><p class="small muted" style="margin:6px 0 14px">Este site é a cópia para abrir sem conta e sem internet. Mudanças (hospedagem, gastos, check-list) são feitas no app principal, dentro do Claude, e aparecem aqui quando a cópia é atualizada.</p><a class="btn pri block" href="${MAIN_URL}" target="_blank" rel="noopener">${ic("arrow","s")} Abrir o app principal</a><p class="small muted" style="margin-top:10px">Abra logado na sua conta Claude. Dica: no Safari, Compartilhar › Adicionar à Tela de Início, para ter os dois ícones.</p>`);return false;}
   S[col][id]=data;saveCache();render();
   if(!db){toast("Sem conexão: salvo só neste aparelho");return false;}
   const key=col+"/"+id;const prev=wq[key]||Promise.resolve();
