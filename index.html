@@ -235,7 +235,7 @@ h3{font-size:16.5px;font-weight:800}
 .searchin input{flex:1;border:0;background:transparent;padding:10px 0;font-size:16px;min-width:0;outline:none}
 .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:12px}
 .gcard{background:var(--card);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);border:0;padding:0;text-align:left;color:var(--ink);display:flex;flex-direction:column;min-width:0}
-.gcard .ph2{position:relative;aspect-ratio:4/3;background:var(--soft)}
+.gcard .ph2{position:relative;flex:none;width:100%;height:0;padding-top:75%;background:var(--soft);overflow:hidden}
 .gcard .ph2 img,.gcard .ph2 .art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .gcard .ph2 .tag{position:absolute;top:8px;left:8px}
 .gcard .ph2 .hrt{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.9);color:var(--coral);display:grid;place-items:center;font-size:15px}
@@ -803,6 +803,8 @@ body.withtray .wrap{padding-bottom:calc(var(--nav) + 170px + env(safe-area-inset
 .hj-fl3{display:flex;gap:8px;align-items:center;justify-content:space-between;width:100%;margin-top:10px;padding:9px 11px;border-radius:14px;border:0;background:rgba(255,255,255,.1);color:#fff;font-size:12.5px;text-align:left;line-height:1.45}
 .flguide{display:flex;gap:5px;align-items:center;margin-top:8px;padding:6px 10px;border-radius:12px;border:0;background:var(--soft);color:var(--ink);font-size:12px;font-weight:700;text-align:left}
 .ckban{border-color:var(--ok);background:var(--ok-bg)}.ckban .pb-r{background:var(--ok);color:#fff}
+.stats3.g3 b{font-size:15.5px;white-space:nowrap;letter-spacing:-.02em}
+.gacerto{margin-top:12px}
 </style>
 
 <div class="wrap" id="app" aria-live="polite"></div>
@@ -1181,7 +1183,7 @@ function draw(){
   $(".nav").hidden=false;
   $("#app").innerHTML=(!navigator.onLine?`<div class="viewbar off">${ic("alert","s")}<span>Sem internet: você está vendo a última versão salva no aparelho.</span></div>`:"")+(conn==="snapshot"?`<div class="viewbar">${ic("info","s")}<span>${window.claude?"Acesso por senha":"Versão de consulta"}: atualizado em${snapAt?" "+new Date(snapAt).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):""}.${window.claude?" Para editar, entre com sua conta Claude.":` <a href="${MAIN_URL}" target="_blank" rel="noopener" style="font-weight:800;color:var(--sun-ink)">Abrir o app principal para editar</a> ·`} <button class="see" data-a="lockOut" style="font-size:12.5px;color:var(--sun-ink);text-decoration:underline">Sair</button></span></div>`:"")+(views[ui.tab]||vHome)();
   $("#nav").innerHTML=[["home","home","Início"],["hoje","sun","Hoje"],["roteiro","list","Roteiro"],["explorar","compass","Explorar"],["mais","grid","Mais"]]
-    .map(([k,i,l])=>`<button data-a="tab" data-v="${k}" ${ui.tab===k||(k==="home"&&["passeios","gastos","reservas"].includes(ui.tab))||(k==="explorar"&&ui.tab==="mapa")||(k==="mais"&&ui.tab==="reservas")?'aria-current="page"':""}>${ic(i)}<span>${l}</span></button>`).join("");
+    .map(([k,i,l])=>`<button data-a="tab" data-v="${k}" ${ui.tab===k||(k==="home"&&["passeios","gastos"].includes(ui.tab))||(k==="explorar"&&ui.tab==="mapa")||(k==="mais"&&ui.tab==="reservas")?'aria-current="page"':""}>${ic(i)}<span>${l}</span></button>`).join("");
   const cta=$("#cta");
   const tray=$("#tray");if(ui.tab==="roteiro"&&ui.rview==="plan"&&!noData()){tray.hidden=false;tray.innerHTML=trayHTML();tray.classList.toggle("min",!!ui.trayMin);document.body.classList.add("withtray");document.body.classList.toggle("traymin",!!ui.trayMin);}else{tray.hidden=true;tray.innerHTML="";document.body.classList.remove("withtray","traymin");}
   if(ui.tab==="roteiro"&&ui.rview!=="geral"&&ui.rview!=="plan"){cta.hidden=false;cta.innerHTML=`<button class="btn pri" data-a="new" data-c="acts">${ic("plus","s")} Atividade</button><button class="btn sun" data-a="ideas">${ic("sparkle","s")} Ideias para o dia</button>`;}
@@ -1659,11 +1661,27 @@ function vReservas(){
 /* ===== GASTOS ===== */
 function vGastos(){
   const F=finance();const p=people();const np=p.length||1;
-  let h=`<div class="ph"><div><h1 class="serif">Gastos</h1><div class="sub">Tudo convertido para reais</div></div>${avatars()}</div>
-  <div class="darkc"><span class="eyebrow">Custo da viagem (tudo)</span><div class="v num">${fmtBRL(F.total)}</div><div class="small" style="opacity:.85">≈ ${fmtBRL(F.total/np)} por pessoa · ${F.L.length} lançamentos</div>${F.btotal?`<div class="darkbar"><span style="width:${Math.min(100,F.total/F.btotal*100)}%"></span></div><div class="small" style="opacity:.8;margin-top:6px">${Math.round(F.total/F.btotal*100)}% do orçamento de ${fmtBRL(F.btotal)}</div>`:""}</div>
+  if(!ui.gp||!(p.includes(ui.gp)||ui.gp==="grupo"))ui.gp=p.includes(ui.me)?ui.me:p[0];const G=ui.gp;
+  const A=auditGastos();const icn=l=>ic(l.src==="flights"?"plane":l.src==="hotels"?"bed":l.src==="tours"?"compass":"wallet","s");
+  let h=`<div class="ph"><div><h1 class="serif">Gastos</h1><div class="sub">Quanto a viagem custa, em reais</div></div><button class="btn sm pri" data-a="qexp">${ic("plus","s")} Anotar</button></div>
+  <div class="chips" style="margin-bottom:12px">${p.map(n=>`<button class="chip" data-a="gPerson" data-v="${esc(n)}" aria-pressed="${G===n}">${esc(n)}</button>`).join("")}<button class="chip" data-a="gPerson" data-v="grupo" aria-pressed="${G==="grupo"}">${ic("users","s")} Grupo todo</button></div>`;
+  if(G!=="grupo"){const mine=F.L.filter(l=>l.split.includes(G)).map(l=>({...l,mine:l.brl/(l.split.length||1)}));const x=F.per[G]||{share:0,paid:0,shareAll:0};
+    const sum=k=>mine.filter(l=>k==="pago"?l.pay==="pago":k==="previsto"?l.pay==="previsto":l.pay!=="pago"&&l.pay!=="previsto").reduce((a,l)=>a+l.mine,0);
+    const bal=x.paid-x.share;const st=F.settle.filter(t=>t.from===G||t.to===G);const byC={};mine.forEach(l=>byC[l.cat]=(byC[l.cat]||0)+l.mine);const mx=Math.max(1,...Object.values(byC));
+    h+=`<div class="darkc"><span class="eyebrow">A viagem de ${esc(G)} custa</span><div class="v num">${fmtBRL(x.shareAll)}</div><div class="small" style="opacity:.85">a parte de ${esc(G)} em ${mine.length} lançamentos, contando o que falta e as estimativas</div></div>
+    <div class="stats3 g3"><div><small>Já pago</small><b class="num" style="color:var(--ok)">${fmtBRL(sum("pago"))}</b><em>sua parte do que já foi pago</em></div><div><small>Falta pagar</small><b class="num" style="color:var(--coral)">${fmtBRL(sum("pendente"))}</b><em>valor certo</em></div><div><small>Estimado</small><b class="num">${fmtBRL(sum("previsto"))}</b><em>chute, pode mudar</em></div></div>
+    <div class="card gacerto"><div class="between"><div><small class="muted">Saiu do bolso de ${esc(G)}</small><b class="num" style="display:block;font-size:20px">${fmtBRL(x.paid)}</b></div><div style="text-align:right"><small class="muted">Acerto</small><b class="num" style="display:block;font-size:20px;color:${bal<-0.5?"var(--coral)":bal>0.5?"var(--ok)":"inherit"}">${Math.abs(bal)<0.5?"em dia":(bal>0?"recebe ":"deve ")+fmtBRL(Math.abs(bal))}</b></div></div>
+     ${st.length?st.map(t=>`<div class="li" style="padding:6px 0"><span class="grow small">${t.from===G?`Pagar a <b>${esc(t.to)}</b>`:`<b>${esc(t.from)}</b> paga a ${esc(G)}`}</span><span class="num" style="font-weight:800">${fmtBRL(t.v)}</span></div>`).join(""):""}</div>
+    ${A.length?`<button class="prepban" data-a="auditOpen" style="margin-top:12px"><span class="pb-r">${A.length}</span><span><b>Conferir gastos</b><small>Valores faltando, quem pagou, repetidos</small></span>${ic("chev","s")}</button>`:""}
+    <div class="sec-h" style="margin-top:18px"><h2>Para onde vai o dinheiro</h2></div><div class="card stack" style="gap:10px">${Object.entries(byC).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<div><div class="between small"><b>${esc(c)}</b><span class="num">${fmtBRL(v)}</span></div><div class="bar" style="margin-top:5px"><span style="width:${(v/mx*100).toFixed(1)}%"></span></div></div>`).join("")||'<div class="empty small">Nada ainda.</div>'}</div>
+    <div class="sec-h" style="margin-top:18px"><h2>Gastos de ${esc(G)}</h2><span class="small muted">a parte dele(a) em cada um</span></div><div class="card">${mine.length?mine.map(l=>`<div class="li" data-a="edit" data-c="${l.src}" data-id="${l.id}" role="button" tabindex="0"><span class="badge">${icn(l)}</span><div class="grow"><div style="font-weight:700">${esc(l.desc)}</div><div class="small muted">${dShort(l.date)} · ${esc(l.cat)}${l.split.length>1?` · dividido por ${l.split.length}`:""}${l.payer?" · pagou "+esc(l.payer):""}</div></div><div style="text-align:right"><div class="num" style="font-weight:800">${fmtBRL(l.mine)}</div><div style="margin-top:2px">${statusPill(l.pay)}</div></div></div>`).join(""):'<div class="empty">Nada para esta pessoa.</div>'}</div>
+    <button class="btn block" style="margin-top:12px" data-a="more" data-v="caixinha">${ic("cash","s")} Caixinha do grupo · saldo ${fmtBRL(kittyStats().bal)}</button>
+    <p class="small muted" style="margin-top:10px">Toque num gasto para corrigir valor, quem pagou ou quem divide. Para ver tudo do grupo, toque em Grupo todo.</p>`;
+    return h;}
+  h+=`<div class="darkc"><span class="eyebrow">Custo da viagem (grupo todo)</span><div class="v num">${fmtBRL(F.total)}</div><div class="small" style="opacity:.85">≈ ${fmtBRL(F.total/np)} por pessoa · ${F.L.length} lançamentos</div>${F.btotal?`<div class="darkbar"><span style="width:${Math.min(100,F.total/F.btotal*100)}%"></span></div><div class="small" style="opacity:.8;margin-top:6px">${Math.round(F.total/F.btotal*100)}% do orçamento de ${fmtBRL(F.btotal)}</div>`:""}</div>
   <div class="stats3 g3"><div><small>Já pago</small><b class="num" style="color:var(--ok)">${fmtBRL(F.paid)}</b><em>valor real</em></div><div><small>Falta pagar</small><b class="num" style="color:var(--coral)">${fmtBRL(F.pend)}</b><em>valor certo, ainda não pago</em></div><div><small>Estimativas</small><b class="num">${fmtBRL(F.prev)}</b><em>chute, pode mudar</em></div></div>
   <button class="btn block" style="margin-top:12px" data-a="more" data-v="caixinha">${ic("cash","s")} Caixinha do grupo · saldo ${fmtBRL(kittyStats().bal)}</button>
-  <div style="margin-top:14px">${auditCard()}</div>`;
+  ${A.length?`<button class="prepban" data-a="auditOpen" style="margin-top:12px"><span class="pb-r">${A.length}</span><span><b>Conferir gastos</b><small>Valores faltando, quem pagou, repetidos</small></span>${ic("chev","s")}</button>`:""}`;
   const pv=F.L.filter(l=>l.pay==="previsto"||l.pay==="pendente");
   h+=fold("g-pagar",`<h2>Ainda vamos pagar</h2><span class="fmeta">${pv.length} itens</span>`,`<button class="see" data-a="new" data-c="expenses" style="margin-bottom:8px">+ Custo previsto</button><div class="card">${pv.length?pv.map(l=>`<div class="li" data-a="edit" data-c="${l.src}" data-id="${l.id}" role="button" tabindex="0"><span class="badge">${ic(l.src==="flights"?"plane":l.src==="hotels"?"bed":l.src==="tours"?"compass":"cash","s")}</span><div class="grow"><div style="font-weight:700">${esc(l.desc)}</div><div class="small muted">${dShort(l.date)} · ${esc(l.cat)}${l.perPerson?" · "+fmtCur(l.amount,l.cur)+"/pessoa":""}</div></div><div style="text-align:right"><div class="num" style="font-weight:800">${fmtBRL(l.brl)}</div>${statusPill(l.pay)}</div></div>`).join(""):'<div class="empty">Nada pendente.</div>'}</div>`,true);
   const maxv=Math.max(1,...CATS.map(c=>Math.max(F.byCat[c]||0,+F.budget[c]||0)));
@@ -1779,10 +1797,11 @@ function vPasseios(){
     return`<div class="agrow"><button class="agday" data-a="goDay" data-v="${d}"><small>${WD[wd(d)]}</small><b>${+d.slice(8)}</b><small>nov</small></button><div class="agitems">${ts_.length?ts_.map(t=>`<div class="agt">${tourChip(t)}<button type="button" class="agsw" data-a="swap" data-id="${t.id}" aria-label="Mudar o dia de ${esc(t.title)}">${ic("swap","s")}<small>dia</small></button></div>`).join(""):`<span class="small muted" style="padding:10px 0">Dia livre de passeios</span>`}</div></div>`;}).join("");
   h+=`</div></div>`;
   const radar=mine.filter(t=>!t.date);
-  h+=`<div class="sec"><div class="sec-h"><h2>Radar</h2><span class="small muted">escolhidos, ainda sem dia</span></div>${radar.length?`<div class="card" style="padding:8px 14px">${radar.map(t=>`<div class="li"><div class="thumb" style="width:52px;height:52px;border-radius:14px">${img(tourPhoto(t),t.title,art(tourCat(t)))}</div><div class="grow"><b>${esc(t.title)}</b><div class="small muted">${t.status==="confirmado"?"Já compramos":"Quero fazer"}${t.operator?" · "+esc(t.operator):""}</div></div><button class="btn sm pri" data-a="tourPick" data-v="${t.placeId||""}" data-id="${t.id}">Escolher dia</button></div>`).join("")}</div>`:`<div class="card empty small">Nada no radar. Toque num passeio abaixo e escolha "sem data" se ainda não souberem o dia.</div>`}</div>`;
+  h+=!radar.length?"":`<div class="sec"><div class="sec-h"><h2>Radar</h2><span class="small muted">escolhidos, ainda sem dia</span></div>${radar.length?`<div class="card" style="padding:8px 14px">${radar.map(t=>`<div class="li"><div class="thumb" style="width:52px;height:52px;border-radius:14px">${img(tourPhoto(t),t.title,art(tourCat(t)))}</div><div class="grow"><b>${esc(t.title)}</b><div class="small muted">${t.status==="confirmado"?"Já compramos":"Quero fazer"}${t.operator?" · "+esc(t.operator):""}</div></div><button class="btn sm pri" data-a="tourPick" data-v="${t.placeId||""}" data-id="${t.id}">Escolher dia</button></div>`).join("")}</div>`:`<div class="card empty small">Nada no radar. Toque num passeio abaixo e escolha "sem data" se ainda não souberem o dia.</div>`}</div>`;
   // disponíveis
   const cat=toursCatalog(city);
-  h+=`<div class="sec"><div class="sec-h"><h2>Passeios em ${esc(city)}</h2><span class="small muted">${cat.length} opções</span></div><div class="grid2">${cat.map(p=>{const t=tourOf(p.id);const st=tourState(t);
+  const catF=cat.filter(p=>{const k=tourState(tourOf(p.id)).k;return k==="none"||k==="radar";});
+  h+=`<div class="sec"><div class="sec-h"><h2>${mine.length?"Mais opções em":"Passeios em"} ${esc(city)}</h2><span class="small muted">${catF.length} para escolher</span></div><p class="small muted" style="margin:-4px 0 10px">Os que vocês já marcaram estão na agenda acima. Toque num passeio para escolher o dia.</p><div class="grid2">${catF.map(p=>{const t=tourOf(p.id);const st=tourState(t);
     return`<button class="gcard" data-a="tourPick" data-v="${p.id}"><div class="ph2">${img(photoOf(p.id),p.name,art(p.cat))}<span class="tag pill ${st.cls}">${st.k==="none"?TIER[p.tier]:st.k==="radar"?"No radar":"✓ "+dShort(t.date)}</span></div><div class="bd"><b>${esc(p.name)}</b>${stars(p.id)}<span class="small muted">${hTxt(p.dur)} · ${esc(p.price.length>30?p.price.slice(0,28)+"…":p.price)}</span><span class="small" style="font-weight:800;color:${st.k==="none"?"var(--pri)":st.k==="radar"?"var(--sun-ink)":"var(--ok)"}">${st.k==="none"?"+ Escolher":st.l}</span></div></button>`;}).join("")}</div>
   ${mine.filter(t=>!t.placeId).length?`<div class="sec"><h3>Personalizados</h3><div class="card">${mine.filter(t=>!t.placeId).map(t=>`<div class="li" data-a="tourPick" data-v="" data-id="${t.id}" role="button" tabindex="0"><span class="badge">${ic("boat","s")}</span><div class="grow"><b>${esc(t.title)}</b><div class="small muted">${tourState(t).l}</div></div>${ic("chev","s")}</div>`).join("")}</div></div>`:""}
   <p class="small muted">Passeios com data aparecem sozinhos no roteiro daquele dia. Para ajustar no dia, abra o Roteiro: dá para encaixar o que está no radar ou tirar um passeio do dia.</p></div>`;
@@ -2906,7 +2925,7 @@ document.addEventListener("click",async e=>{
    case"day":ui.day=v;persistUI();render();break;
    case"goDay":ui.tab="roteiro";ui.day=v;persistUI();render();break;
    case"resTab":if(v==="passeios"){ui.tab="passeios";}else{ui.tab="reservas";ui.res=v;}persistUI();render();break;
-   case"more":closeForm();if(v==="mapa"){ui.tab="mapa";ui.mapKey="city:"+(MCITIES.includes(cityOfDay(ui.day||TRIP.start))?cityOfDay(ui.day||TRIP.start):"San Andrés");ui.more=null;}else if(v==="painel"){ui.tab="home";ui.more=null;}else if(v==="reservas"){ui.tab="reservas";ui.res="voos";ui.more=null;}else{ui.tab="mais";ui.more=v||null;}persistUI();render();break;
+   case"more":closeForm();if(v==="mapa"){ui.tab="mapa";ui.mapKey="city:"+(MCITIES.includes(cityOfDay(ui.day||TRIP.start))?cityOfDay(ui.day||TRIP.start):"San Andrés");ui.more=null;}else if(v==="painel"){ui.tab="home";ui.more=null;}else if(v==="reservas"){ui.tab="reservas";ui.res="voos";ui.more=null;}else if(["gastos","passeios","explorar","roteiro","hoje"].includes(v)){ui.tab=v;ui.more=null;}else{ui.tab="mais";ui.more=v||null;}persistUI();render();break;
    case"clima":openClima(v);break;
    case"climaAll":closeForm();ui.tab="mais";ui.more="clima";persistUI();render();break;
    case"pcity":ui.pcity=v;persistUI();render();break;
@@ -3028,6 +3047,8 @@ document.addEventListener("click",async e=>{
    case"docFor":uploadDoc(async(id,doc)=>{await write("docs",id,{...doc,person:v,kind:"Documento pessoal"});render();});break;
    case"ckFor":{const x=S.checks[el.dataset.id];if(!x)break;const done={...(x.done||{})};done[v]=!done[v];write("checks",el.dataset.id,{...x,done});break;}
    case"rain":openRain(v);break;
+   case"gPerson":ui.gp=v;render();break;
+   case"auditOpen":openSheet(`<div class="between" style="margin-bottom:10px"><span class="eyebrow">Conferir gastos</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div>${auditCard()}`);break;
    case"money":openMoney(v);break;
    case"bag":openBag(v);break;
    case"bagCk":toggleBag(el.dataset.id,v);break;
