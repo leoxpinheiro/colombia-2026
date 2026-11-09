@@ -847,6 +847,17 @@ body.withtray .wrap{padding-bottom:calc(var(--nav) + 170px + env(safe-area-inset
 .pc-k{font-weight:700;flex:none;width:112px}.pc-d{flex:1;min-width:0;color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pc-d .see{font-size:12px;font-weight:800;color:var(--pri);background:none;border:0;padding:0}
 button.pc-row b{font-weight:800}button.pc-row:hover{background:var(--soft)}
+.plan-leg>button{display:flex;align-items:center;gap:8px;font-size:13px;background:none;border:0;padding:4px 4px;margin:-4px -4px;border-radius:10px;color:var(--ink);text-align:left;width:calc(100% + 8px)}
+.plan-leg>button:hover{background:var(--soft)}.plan-leg>button svg{flex:none;color:var(--muted)}
+.plan-leg i{width:11px;height:11px;border-radius:4px;flex:none}.plan-leg span{flex:1;min-width:0;color:var(--muted)}.plan-leg b{font-weight:800;white-space:nowrap}
+button.levar{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}
+.lv-more{flex-basis:100%;font-size:12.5px;font-weight:700;display:flex;gap:5px;align-items:center;background:rgba(0,0,0,.14);border-radius:12px;padding:8px 10px}
+.pl-head{display:flex;justify-content:space-between;align-items:baseline;border-left:5px solid var(--c);padding:4px 0 4px 12px;margin-bottom:10px}.pl-head span{font-size:20px;font-weight:800}.pl-head b{font-size:24px;font-weight:800}
+.pl-cat{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:14px 2px 6px}
+.pl-sum{display:flex;flex-direction:column;gap:6px}.pl-sum button{display:flex;align-items:center;gap:10px;background:var(--card);border:0;border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);color:var(--ink);font-size:14px;text-align:left}
+.pl-sum i{width:12px;height:12px;border-radius:4px;flex:none}.pl-sum span{flex:1}.pl-sum b{font-weight:800}
+@media (max-width:480px){.plan-top{flex-direction:column;align-items:stretch}.plan-top .pdonut{align-self:center;width:150px;height:150px}.plan-top .pd-in{width:104px;height:104px}.plan-leg{gap:4px}.plan-leg>button{padding:8px 6px;font-size:14px}}
+.pl-head{flex-wrap:wrap;gap:4px 12px}.pl-head span{font-size:18px}.pl-head b{font-size:22px;white-space:nowrap}
 </style>
 
 <div class="wrap" id="app" aria-live="polite"></div>
@@ -2940,13 +2951,13 @@ function planCalc(G){const F=finance();const mine=F.L.filter(l=>l.split.includes
 function pDonut(segs,center,sub){const tot=segs.reduce((a,s)=>a+s.v,0)||1;let acc=0;const stops=segs.filter(s=>s.v>0).map(s=>{const a=acc/tot*360;acc+=s.v;return`${s.c} ${a.toFixed(2)}deg ${(acc/tot*360).toFixed(2)}deg`;}).join(",");
   return`<div class="pdonut" style="background:conic-gradient(${stops||"var(--soft) 0deg 360deg"})"><div class="pd-in"><small>${sub}</small><b class="num">${center}</b></div></div>`;}
 function planBlock(G){const C=planCalc(G);const cop=v=>{const c=v/rate("COP");return c>=1e6?`COP ${(c/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})} milhões`:`COP ${Math.round(c/1000)} mil`;};
-  const segs=[{k:"Já pago",v:C.pago,c:"var(--ok)"},{k:"Falta pagar",v:C.falta,c:"var(--coral)"},{k:"Estimado em Gastos",v:C.prev,c:"var(--sun)"},{k:"Reserva do dia a dia",v:C.reserve,c:"var(--turq)"}];
+  const segs=[{id:"pago",k:"Já pago",v:C.pago,c:"var(--ok)"},{id:"falta",k:"Falta pagar",v:C.falta,c:"var(--coral)"},{id:"prev",k:"Estimado em Gastos",v:C.prev,c:"var(--sun)"},{id:"res",k:"Reserva do dia a dia",v:C.reserve,c:"var(--turq)"}];const miss=missingVals(G);
   const ro=conn==="snapshot";
   return`<div class="plan">
    <div class="plan-top">${pDonut(segs,fmtBRL(C.total).replace(/,\d\d$/,""),"viagem toda")}
-    <div class="plan-leg">${segs.map(s=>`<div><i style="background:${s.c}"></i><span>${s.k}</span><b class="num">${fmtBRL(s.v)}</b></div>`).join("")}</div></div>
-   <div class="levar"><div><span class="eyebrow">Para levar na viagem</span><div class="lv-v num">${fmtBRL(C.levar)}</div><div class="small">≈ ${cop(C.levar)} · ≈ ${fmtBRL(C.levar/C.days)} por dia em ${C.days} dias</div></div>
-    <div class="lv-split"><div><small>Estimados</small><b class="num">${fmtBRL(C.prev+C.falta)}</b></div><div><small>Dia a dia</small><b class="num">${fmtBRL(C.reserve)}</b></div></div></div>
+    <div class="plan-leg">${segs.map(s=>`<button data-a="planList" data-v="${s.id}|${esc(G)}"><i style="background:${s.c}"></i><span>${s.k}</span><b class="num">${fmtBRL(s.v)}</b>${ic("chev","s")}</button>`).join("")}</div></div>
+   <button class="levar" data-a="planList" data-v="levar|${esc(G)}"><div><span class="eyebrow">Para levar na viagem</span><div class="lv-v num">${fmtBRL(C.levar)}</div><div class="small">≈ ${cop(C.levar)} · ≈ ${fmtBRL(C.levar/C.days)} por dia em ${C.days} dias</div></div>
+    <div class="lv-split"><div><small>Estimados</small><b class="num">${fmtBRL(C.prev+C.falta)}</b></div><div><small>Dia a dia</small><b class="num">${fmtBRL(C.reserve)}</b></div></div><div class="lv-more">${miss.length?`${ic("alert","s")} ${miss.length} ${miss.length>1?"itens":"item"} ainda sem valor: a conta pode estar para menos`:`${ic("check","s")} Todos os gastos têm valor`} · ver detalhes ${ic("chev","s")}</div></button>
    ${!C.anySet?`<div class="tip" style="margin-top:10px">${ic("info","s")} Coloque abaixo quanto quer reservar para comida, compras e imprevistos. Tem sugestão pronta, pelo roteiro.</div>`:""}
    <div class="sec-h" style="margin-top:16px"><h2>Previsão por tipo de gasto</h2><span class="small muted">por pessoa</span></div>
    ${ro?"":`<div class="pwho"><span>O que você digitar vale para:</span><div class="chips">${people().map(n=>`<button class="chip" data-a="planWho" data-v="${esc(n)}" aria-pressed="${planWho(G).includes(n)}">${planWho(G).includes(n)?ic("check","s")+" ":""}${esc(n)}</button>`).join("")}</div></div>`}
@@ -2962,6 +2973,30 @@ async function planSet(c,v,who){const all=JSON.parse(JSON.stringify(S.meta.plan|
 async function planAllSug(G){const all=JSON.parse(JSON.stringify(S.meta.plan||{}));const W=planWho(G);W.forEach(n=>{all[n]=all[n]||{};PCATS.forEach(([c])=>{if(all[n][c]==null){const s=pSug(n,c);if(s)all[n][c]=s;}});});await write("meta","plan",all);toast(`Sugestões aplicadas para ${W.join(" e ")}`);}
 document.addEventListener("change",e=>{const i=e.target.closest&&e.target.closest("[data-plan]");if(!i)return;const v=String(i.value).replace(/\D/g,"");planSet(i.dataset.plan,v===""?"":+v);});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.closest&&e.target.closest("[data-plan]")){e.preventDefault();e.target.blur();}});
+
+/* ---- listas ao tocar ---- */
+function missingVals(G){const out=[];const inS=x=>splitOf(x).includes(G);
+  Object.entries(S.tours).forEach(([id,t])=>{if(!(+t.price)&&inS(t))out.push({c:"tours",id,t:t.title,d:t.date,hint:PLACE[t.placeId]&&PLACE[t.placeId].price||"passeio"});});
+  Object.entries(S.hotels).forEach(([id,h])=>{if(!(+h.price)&&inS(h))out.push({c:"hotels",id,t:h.name||("Hospedagem "+h.city),d:h.checkin,hint:"hospedagem"});});
+  Object.entries(S.flights).forEach(([id,f])=>{if(!(+f.price)&&!(+f.pts)&&inS(f))out.push({c:"flights",id,t:`Voo ${f.frm} → ${f.to}`,d:f.date,hint:"voo"});});
+  return out.sort((a,b)=>(a.d||"").localeCompare(b.d||""));}
+function planList(kind,G){const F=finance();const mine=F.L.filter(l=>l.split.includes(G)).map(l=>({...l,mine:l.brl/(l.split.length||1)}));const C=planCalc(G);
+  const T={pago:["Já pago","var(--ok)",l=>l.pay==="pago","A parte de "+G+" no que já foi pago, por quem quer que tenha pago."],falta:["Falta pagar","var(--coral)",l=>l.pay!=="pago"&&l.pay!=="previsto","Valor certo, mas ainda não pago. Mude para “pago” quando pagar."],prev:["Estimado em Gastos","var(--sun)",l=>l.pay==="previsto","Chutes já lançados. Ajuste o valor quando souber o real."]};
+  const icn=l=>ic(l.src==="flights"?"plane":l.src==="hotels"?"bed":l.src==="tours"?"compass":"wallet","s");
+  const rowL=l=>`<div class="li" data-a="edit" data-c="${l.src}" data-id="${l.id}" role="button" tabindex="0"><span class="badge">${icn(l)}</span><div class="grow"><div style="font-weight:700">${esc(l.desc)}</div><div class="small muted">${dShort(l.date)} · ${esc(l.cat)}${l.split.length>1?` · ÷${l.split.length}`:""}${l.payer?" · "+esc(pagouTxt(l.payer)):""}</div></div><div style="text-align:right"><div class="num" style="font-weight:800">${fmtBRL(l.mine)}</div>${l.split.length>1?`<div class="small muted num">de ${fmtBRL(l.brl)}</div>`:""}</div></div>`;
+  const listOf=f=>{const L=mine.filter(f);const by={};L.forEach(l=>(by[l.cat]=by[l.cat]||[]).push(l));return Object.entries(by).sort((a,b)=>b[1].reduce((x,l)=>x+l.mine,0)-a[1].reduce((x,l)=>x+l.mine,0)).map(([c,ls])=>`<div class="pl-cat"><span>${esc(c)}</span><b class="num">${fmtBRL(ls.reduce((x,l)=>x+l.mine,0))}</b></div><div class="card" style="padding:4px 14px">${ls.map(rowL).join("")}</div>`).join("")||'<div class="card empty small">Nada aqui.</div>';};
+  const resH=()=>`<div class="card" style="padding:4px 14px">${C.cats.filter(x=>x.res).map(x=>`<div class="li"><span class="badge">${ic(x.i,"s")}</span><div class="grow"><div style="font-weight:700">${esc(x.lbl)}</div><div class="small muted">reserva ${fmtBRL(x.res)}${x.spent?` · já anotado ${fmtBRL(x.spent)}`:""}</div></div><b class="num">${fmtBRL(x.left)}</b></div>`).join("")||'<div class="empty small">Nenhuma reserva definida. Coloque valores em “Previsão por tipo de gasto”.</div>'}</div>`;
+  const missH=()=>{const M=missingVals(G);return M.length?`<div class="eyebrow" style="margin:16px 0 6px;color:var(--coral)">${ic("alert","s")} Sem valor ainda (a conta está para menos)</div><div class="card" style="padding:4px 14px">${M.map(m=>`<div class="li" data-a="edit" data-c="${m.c}" data-id="${m.id}" role="button" tabindex="0"><span class="badge" style="background:var(--coral-bg);color:var(--coral)">${ic("alert","s")}</span><div class="grow"><div style="font-weight:700">${esc(m.t)}</div><div class="small muted">${dShort(m.d)} · ${esc(m.hint)}</div></div><span class="btn sm">Pôr valor</span></div>`).join("")}</div>`:"";};
+  let title,color,total,body;
+  if(kind==="res"){title="Reserva do dia a dia";color="var(--turq)";total=C.reserve;body=`<p class="small muted" style="margin:0 0 10px">Dinheiro para gastos que ainda não foram anotados. Cada gasto anotado na viagem sai daqui.</p>${resH()}`;}
+  else if(kind==="levar"){title="Para levar na viagem";color="var(--pri)";total=C.levar;const folga=Math.ceil(C.levar*0.1/10)*10;
+    body=`<div class="pl-sum">${[["falta","Falta pagar",C.falta,"var(--coral)"],["prev","Estimados",C.prev,"var(--sun)"],["res","Reserva do dia a dia",C.reserve,"var(--turq)"]].map(([k,l,v,c])=>`<button data-a="planList" data-v="${k}|${esc(G)}"><i style="background:${c}"></i><span>${l}</span><b class="num">${fmtBRL(v)}</b>${ic("chev","s")}</button>`).join("")}</div>
+    <div class="card" style="margin-top:10px"><div class="between"><span class="small"><b>Com 10% de folga</b><br><span class="muted">câmbio, gorjeta, imprevisto</span></span><b class="num" style="font-size:20px">${fmtBRL(C.levar+folga)}</b></div></div>
+    ${missH()}
+    <div class="tip" style="margin-top:12px">${ic("info","s")} Dicas para não faltar: leve parte em pesos (táxi em San Andrés e Cartagena, taxas dos cayos, mercado) e o resto no cartão sem IOF alto. Saque no caixa eletrônico se precisar: evite trocar tudo no aeroporto.</div>`;}
+  else{const[t,c,f,h]=T[kind];title=t;color=c;total=mine.filter(f).reduce((a,l)=>a+l.mine,0);body=`<p class="small muted" style="margin:0 0 10px">${esc(h)}</p>${listOf(f)}${kind==="prev"||kind==="falta"?missH():""}`;}
+  openSheet(`<div class="between" style="margin-bottom:8px"><span class="eyebrow">${esc(G)}</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div>
+  <div class="pl-head" style="--c:${color}"><span>${esc(title)}</span><b class="num">${fmtBRL(total)}</b></div>${body}`);}
 
 /* ---------- formulários ---------- */
 const PAY=["previsto","pendente","pago","parcelado"];const METH=["","cartão","pix","dinheiro","milhas","transferência"];
@@ -3164,6 +3199,7 @@ document.addEventListener("click",async e=>{
    case"gPerson":ui.gp=v;render();break;
    case"planSug":{const[c,G]=v.split("|");planSet(c,pSug(G,c));break;}
    case"planWho":togglePlanWho(v);break;
+   case"planList":{const[k,G]=v.split("|");planList(k,G);break;}
    case"planAll":planAllSug(v);break;
    case"repayOk":repayOk(v);break;
    case"repayUndo":repayUndo(v);break;
