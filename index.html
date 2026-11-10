@@ -2619,9 +2619,9 @@ function mapPick(){const city=formVal("city")||ui.city;const M=mapForCity(city);
   o.querySelector(".mp-x").addEventListener("click",()=>o.remove());ok.addEventListener("click",()=>{if(sel)setCoordsInput(sel.lat,sel.lng);o.remove();toast("Localização marcada");});}
 
 /* ===== PREPARAR VIAGEM: o que falta preencher ===== */
-function hotelMiss(h){return[!h.address&&"endereço",!hasLoc(h)&&"local no mapa",!(+h.price)&&"valor",+h.price&&!h.payer&&"quem pagou",!h.code&&"código da reserva",!h.tin&&"hora do check-in"].filter(Boolean);}
-function flightMiss(f){return[!f.pnr&&"localizador",!(f.dep&&f.arr)&&"horários",!(+f.price||+f.pts)&&"valor ou pontos",+f.price&&!f.payer&&"quem pagou"].filter(Boolean);}
-function tourMiss(t){return[!t.time&&"horário",!t.operator&&"empresa",!t.meet&&"ponto de encontro",!t.contact&&"contato",!(+t.price)&&"valor",+t.price&&t.pay!=="pago"&&"pagamento",+t.price&&t.pay==="pago"&&!t.payer&&"quem pagou"].filter(Boolean);}
+function hotelMiss(h){return[!hasLoc(h)&&!h.address&&"endereço",!(+h.price)&&!(+h.pts)&&"valor",+h.price&&!h.payer&&"quem pagou"].filter(Boolean);}
+function flightMiss(f){const px=f.ppx&&Object.keys(f.ppx).length;const val=px?Object.values(f.ppx).some(x=>+x.v||+x.pts):(+f.price||+f.pts);return[!(f.dep&&f.arr)&&"horários",!val&&"valor",!px&&+f.price&&!f.payer&&"quem pagou"].filter(Boolean);}
+function tourMiss(t){return[!t.time&&"horário",!(+t.price)&&!(+t.pts)&&"valor",+t.price&&t.pay!=="pago"&&"pagamento",+t.price&&t.pay==="pago"&&!t.payer&&"quem pagou"].filter(Boolean);}
 function prepStats(){const H=Object.entries(S.hotels).filter(([,h])=>h.status!=="cancelado"),F=Object.entries(S.flights),T=Object.entries(S.tours).filter(([,t])=>t.status!=="cancelado");
   const gaps=hotelGaps();const aud=auditGastos().filter(a=>a.lvl==="bad");const miss=H.reduce((a,[,h])=>a+hotelMiss(h).length,0)+F.reduce((a,[,f])=>a+flightMiss(f).length,0)+T.reduce((a,[,t])=>a+tourMiss(t).length,0)+gaps.length+aud.length;
   const tot=H.length*6+F.length*5+T.length*7+nightsNeeded().length+Math.max(aud.length,1);return{H,F,T,gaps,aud,miss,pct:Math.max(0,Math.min(100,Math.round((1-miss/tot)*100)))};}
