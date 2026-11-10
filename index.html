@@ -93,10 +93,10 @@ h3{font-size:16.5px;font-weight:800}
 .sync{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:5px;font-weight:600}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}.dot.on{background:var(--ok)}.dot.off{background:var(--coral)}
 /* hero */
-.hero{position:relative;border-radius:30px;overflow:hidden;min-height:340px;color:#fff;background:#0f6f78;box-shadow:var(--shadow)}
+.hero{position:relative;border-radius:30px;overflow:hidden;min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;background:#0f6f78;box-shadow:var(--shadow)}
 .hero canvas,.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,30,32,.0) 30%,rgba(6,30,32,.62) 100%);pointer-events:none}
-.hero .in{position:absolute;left:0;right:0;bottom:0;padding:22px 22px 46px;z-index:2;display:flex;flex-direction:column;gap:8px}
+.hero .in{position:relative;padding:60px 22px 46px;z-index:2;display:flex;flex-direction:column;gap:8px}
 .hero h1{font-family:var(--f-serif);font-weight:400;font-size:clamp(46px,13vw,66px);line-height:.92;letter-spacing:-.02em;text-shadow:0 2px 18px rgba(0,0,0,.25)}
 .hero h1 em{font-style:italic;color:var(--sun)}
 .flagbar{display:flex;width:54px;height:6px;border-radius:3px;overflow:hidden}.flagbar i{flex:2;background:#fcd116}.flagbar i+i{flex:1;background:#003893}.flagbar i+i+i{background:#ce1126}
@@ -903,6 +903,16 @@ button.levar{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}
 .hp-btn{margin-top:6px}
 .tstat .ts-g{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin-top:6px}.tstat b{display:block;font-size:22px;font-weight:800;line-height:1}.tstat small{font-size:11.5px;color:var(--muted);font-weight:700}
 .homepend .pc-sub{display:block;font-size:13px;opacity:.8;margin:-2px 0 8px;font-weight:500}
+.hero .in>div:not([class]){text-shadow:0 1px 10px rgba(0,0,0,.45)}
+.hstats{display:flex;gap:5px;flex-wrap:nowrap;margin:6px 0 0}
+.hstats span{display:inline-flex;align-items:baseline;gap:5px;padding:5px 9px;border-radius:999px;white-space:nowrap;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);font-size:11.5px;font-weight:600}
+.hstats b{font-size:15px;font-weight:800;color:var(--sun)}
+.wxbar{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 0;padding:12px 14px;border:0;border-radius:18px;background:var(--card,#fff);box-shadow:var(--shadow);color:var(--ink);text-align:left;font:inherit}
+.wxbar .wx-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#fff4d6;color:var(--sun);flex:none}
+.wxbar .wx-t{flex:1;min-width:0;display:flex;flex-direction:column}
+.wxbar .wx-t small{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.6}
+.wxbar .wx-t b{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wxbar .wx-n{font-size:24px;font-weight:800}.wxbar .wx-n i{font-style:normal;font-size:14px;opacity:.55;font-weight:700;margin-left:2px}
 </style>
 
 <div class="wrap" id="app" aria-live="polite"></div>
@@ -1317,12 +1327,13 @@ function vHome(){
   const hero=MEDIA.hero;
   let h=`<header class="hdr"><div><div class="hi">${conn==="snapshot"?"Olá! 👋":"Olá, "+esc(me)+" 👋"}</div><div class="sync">${syncTxt()}</div></div><div class="row" style="gap:8px"><button class="iconbtn" data-a="alerts" aria-label="Pendências">${ic("bell")}${al.length?`<span class="b">${al.length}</span>`:""}</button><button class="avatar" data-a="more" data-v="ajustes" aria-label="Ajustes">${esc(me[0]||"?")}</button></div></header>
   <section class="hero">${hero?`<img src="${esc(hero.src)}" alt="Mar de sete cores em San Andrés">`:`<canvas id="heroArt" aria-hidden="true"></canvas>`}
-   <div class="in"><div class="flagbar"><i></i><i></i><i></i></div><h1>Colômbia<br><em>2026</em></h1><div style="font-weight:600;opacity:.95">San Andrés · Cartagena · Medellín · Bogotá · Belém</div><div class="cdown">${cd}</div></div></section>
+   <div class="in"><div class="flagbar"><i></i><i></i><i></i></div><h1>Colômbia<br><em>2026</em></h1><div style="font-weight:600;opacity:.95">San Andrés · Cartagena · Medellín · Bogotá · Belém</div>${(()=>{try{return`<div class="hstats"><span><b>${dayList().length}</b>dias</span><span><b>5</b>cidades</span><span><b>${flightsSorted().length}</b>voos</span><span><b>${Object.keys(S.tours||{}).length}</b>passeios</span></div>`}catch(e){return""}})()}<div class="cdown">${cd}</div></div></section>
   <button class="search" data-a="tab" data-v="explorar">${ic("search")}<span>O que vamos fazer hoje?</span><span class="go">${ic("arrow")}</span></button>
   ${(()=>{const f=flightsSorted().find(x=>x.dep&&flDepTs(x)>Date.now());if(!f)return"";const st=ckState(f);if(!(st.s==="aberto"||(st.s==="breve"&&st.open-Date.now()<72*36e5)))return"";return`<button class="prepban ckban" data-a="more" data-v="voos"><span class="pb-r">${ic("plane","s")}</span><span><b>${st.s==="aberto"?"Check-in aberto":"Check-in em breve"}: ${esc(f.frm)} → ${esc(f.to)}</b><small>${esc(st.txt)}</small></span>${ic("chev","s")}</button>`;})()}`;
   if(noData())return h+`<div class="sec">${emptyState()}</div>`;
   const stays=[];Object.values(S.hotels).filter(x=>x.city!=="Belém"&&x.status!=="cancelado").sort((a,b)=>(a.checkin||"").localeCompare(b.checkin||"")).forEach(x=>{const o=stays.find(y=>y.city===x.city);if(o){if(x.checkout>o.checkout)o.checkout=x.checkout;if(x.checkin<o.checkin)o.checkin=x.checkin;}else stays.push({city:x.city,checkin:x.checkin,checkout:x.checkout});});
   h+=homeSec("Destinos","5 cidades · 14 dias",`<div class="hscroll">${stays.map(s=>destCard(s.city,`${dShort(s.checkin)} – ${dShort(s.checkout)} · ${nights(s)} noites`,s.checkin)).join("")}${destCard("Bogotá","27/11 · passeio na conexão","2026-11-27")}${destCard("Belém","28/11 · 1 dia inteiro","2026-11-28")}</div>`,true);
+  {const c=climaCity(curCity0),vb=VIBE[c.vibe[1]||c.vibe[0]];h+=`<button class="wxbar" data-a="clima" data-v="${esc(curCity0)}"><span class="wx-ic">${ic(vb[0],"l")}</span><span class="wx-t"><small>Tempo em ${esc(curCity0)}</small><b>${esc(vb[1])}</b></span><span class="wx-n">${c.hi}°<i>/${c.lo}°</i></span>${ic("chev","s")}</button>`;}
   const nh=Object.entries(S.hotels).map(([id,x])=>({id,...x})).filter(x=>x.checkout&&ts(x.checkout,"12:00",x.city)>T.now&&x.city!=="Belém").sort((a,b)=>(a.checkin||"").localeCompare(b.checkin||""))[0];
   if(nh){const ph=nh.photo?{src:nh.photo}:cityPhoto(nh.city);h+=homeSec("Próxima hospedagem",nh.city,`<button class="prow" data-a="resTab" data-v="hoteis"><div class="thumb">${img(ph,nh.city,cityArt(nh.city))}</div><div class="pinfo" style="flex:1"><span class="eyebrow">${esc(nh.city)}</span><b>${esc(nh.name&&nh.name!=="A definir"?nh.name:"Hospedagem a definir")}</b><span class="small muted">${dShort(nh.checkin)} – ${dShort(nh.checkout)} · ${nights(nh)} noites</span></div>${statusPill(nh.status)}</button>`,true);}
   h+=`  <div class="quick q8"><button data-a="goDay" data-v="${T.phase==="durante"?todayFor():TRIP.start}"><span class="q">${ic("list","l")}</span>Roteiro</button><button data-a="fullMap" data-v="${esc(MCITIES.includes(curCity0)?curCity0:"San Andrés")}"><span class="q">${ic("map","l")}</span>Mapa</button><button data-a="tab" data-v="passeios"><span class="q">${ic("boat","l")}</span>Passeios</button><button data-a="tab" data-v="gastos"><span class="q">${ic("wallet","l")}</span>Gastos</button><button data-a="qexp"><span class="q sun">${ic("plus","l")}</span>Anotar gasto</button><button data-a="resTab" data-v="voos"><span class="q">${ic("ticket","l")}</span>Reservas</button><button data-a="more" data-v="checklist"><span class="q">${ic("check","l")}</span>Checklist</button><button data-a="pdf"><span class="q">${ic("file","l")}</span>PDF</button></div>${homeConv()}`;
@@ -1330,8 +1341,7 @@ function vHome(){
   const nf=flightsSorted().find(f=>{const t=ts(f.date,f.dep||"23:59",flightOrigin(f));return isNaN(t)||t>T.now;});
   if(nf)h+=fold("h-voo",`<h2>Próximo voo</h2><span class="fmeta">${esc(nf.frm)} → ${esc(nf.to)} · ${dShort(nf.date)}</span>`,`${bpHTML(nf)}<button class="see" data-a="resTab" data-v="voos" style="margin-top:8px">Ver todos os voos ›</button>`,true);
   const curCity=T.phase==="durante"?cityOfDay(todayFor()):T.phase==="antes"?"San Andrés":"Fortaleza";const rd=readiness();
-  h+=`<div class="tiles" style="margin-top:12px"><button class="tile" data-a="clima" data-v="${esc(curCity)}" style="border:0;text-align:left;color:var(--ink)"><span class="eyebrow">Tempo em ${esc(curCity)}</span><div class="row" style="gap:8px;flex-wrap:nowrap"><span class="big">${climaCity(curCity).hi}°</span><span class="muted" style="font-weight:700">/ ${climaCity(curCity).lo}°</span><span style="color:var(--sun);margin-left:auto">${ic(VIBE[climaCity(curCity).vibe[1]||climaCity(curCity).vibe[0]][0],"l")}</span></div><span class="small muted">${esc(VIBE[climaCity(curCity).vibe[1]||climaCity(curCity).vibe[0]][1])} · média de novembro</span><span class="small" style="color:var(--pri);font-weight:800">O que vestir ›</span></button>
-  <button class="tile tstat" data-a="tab" data-v="roteiro" style="border:0;text-align:left;color:var(--ink)"><span class="eyebrow">A viagem</span><div class="ts-g"><div><b class="num">${dayList().length}</b><small>dias</small></div><div><b class="num">5</b><small>cidades</small></div><div><b class="num">${flightsSorted().length}</b><small>voos</small></div><div><b class="num">${Object.keys(S.tours).length}</b><small>passeios</small></div></div></button></div>`;
+
   return h;
 }
 function destCard(city,sub,d){const ph=cityPhoto(city);return`<button class="pcard" data-a="cityGo" data-v="${esc(city)}">${img(ph,city,cityArt(city).replace('<span class="nm">'+esc(city)+'</span>',""))}<div class="lab"><b>${esc(city)}</b><span>${esc(sub)}</span></div><span class="arr">${ic("arrow","s")}</span></button>`;}
