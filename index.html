@@ -882,6 +882,12 @@ button.levar{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}
 .fa-i{display:flex;gap:9px;align-items:flex-start;padding:7px 2px;border-top:1px solid rgba(255,255,255,.22);font-size:13.5px;cursor:pointer;line-height:1.35}
 .fa-i em{font-style:normal;opacity:.82;font-size:12px}.fa-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);flex:none;margin-top:6px}.fa-i.u .fa-dot{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}.fa-i.u{font-weight:700}
 .fa-b{margin-top:8px;background:#fff;color:var(--coral);border:0;font-weight:800}
+.homepend{margin-top:12px}.homepend .fold{border:2px solid var(--coral);background:var(--card);border-radius:20px;overflow:hidden}
+.hp-ic{position:relative;width:38px;height:38px;border-radius:12px;background:var(--coral);color:#fff;display:grid;place-items:center;flex:none}.hp-ic i{position:absolute;top:-7px;right:-8px;min-width:20px;height:20px;border-radius:99px;background:#fff;color:var(--coral);font-style:normal;font-size:11.5px;font-weight:900;display:grid;place-items:center;padding:0 5px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.hp-sub{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-top:2px}
+.hp-sec{padding:8px 0 10px;border-top:1px solid var(--line)}.hp-sec:first-child{border-top:0}.hp-st{display:flex;gap:6px;align-items:center;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--coral);margin-bottom:4px}
+.hp-i{display:flex;gap:9px;align-items:flex-start;padding:6px 2px;font-size:13.5px;line-height:1.35;cursor:pointer}.hp-i em{font-style:normal;color:var(--muted);font-size:12px}
+.hp-dot{width:8px;height:8px;border-radius:50%;background:var(--line);flex:none;margin-top:6px}.hp-i.u .hp-dot{background:var(--coral)}.hp-i.u{font-weight:700}
 </style>
 
 <div class="wrap" id="app" aria-live="polite"></div>
@@ -1298,10 +1304,10 @@ function vHome(){
   <section class="hero">${hero?`<img src="${esc(hero.src)}" alt="Mar de sete cores em San Andrés">`:`<canvas id="heroArt" aria-hidden="true"></canvas>`}
    <div class="in"><div class="flagbar"><i></i><i></i><i></i></div><h1>Colômbia<br><em>2026</em></h1><div style="font-weight:600;opacity:.95">San Andrés · Cartagena · Medellín · Bogotá · Belém</div><div class="cdown">${cd}</div></div></section>
   <button class="search" data-a="tab" data-v="explorar">${ic("search")}<span>O que vamos fazer hoje?</span><span class="go">${ic("arrow")}</span></button>
-  ${ckAlert(true)}${(()=>{const f=flightsSorted().find(x=>x.dep&&flDepTs(x)>Date.now());if(!f)return"";const st=ckState(f);if(!(st.s==="aberto"||(st.s==="breve"&&st.open-Date.now()<72*36e5)))return"";return`<button class="prepban ckban" data-a="more" data-v="voos"><span class="pb-r">${ic("plane","s")}</span><span><b>${st.s==="aberto"?"Check-in aberto":"Check-in em breve"}: ${esc(f.frm)} → ${esc(f.to)}</b><small>${esc(st.txt)}</small></span>${ic("chev","s")}</button>`;})()}${(()=>{const P=prepStats();return P.miss&&T.phase!=="depois"?`<button class="prepban" data-a="more" data-v="prep"><span class="pb-r">${P.pct}%</span><span><b>Deixar o app pronto</b><small>Faltam ${P.miss} informações: hospedagens, voos, passeios e gastos</small></span>${ic("chev","s")}</button>`:"";})()}
+  ${(()=>{const f=flightsSorted().find(x=>x.dep&&flDepTs(x)>Date.now());if(!f)return"";const st=ckState(f);if(!(st.s==="aberto"||(st.s==="breve"&&st.open-Date.now()<72*36e5)))return"";return`<button class="prepban ckban" data-a="more" data-v="voos"><span class="pb-r">${ic("plane","s")}</span><span><b>${st.s==="aberto"?"Check-in aberto":"Check-in em breve"}: ${esc(f.frm)} → ${esc(f.to)}</b><small>${esc(st.txt)}</small></span>${ic("chev","s")}</button>`;})()}
   <div class="quick q8"><button data-a="goDay" data-v="${T.phase==="durante"?todayFor():TRIP.start}"><span class="q">${ic("list","l")}</span>Roteiro</button><button data-a="fullMap" data-v="${esc(MCITIES.includes(curCity0)?curCity0:"San Andrés")}"><span class="q">${ic("map","l")}</span>Mapa</button><button data-a="tab" data-v="passeios"><span class="q">${ic("boat","l")}</span>Passeios</button><button data-a="tab" data-v="gastos"><span class="q">${ic("wallet","l")}</span>Gastos</button><button data-a="qexp"><span class="q sun">${ic("plus","l")}</span>Anotar gasto</button><button data-a="resTab" data-v="voos"><span class="q">${ic("ticket","l")}</span>Reservas</button><button data-a="more" data-v="checklist"><span class="q">${ic("check","l")}</span>Checklist</button><button data-a="pdf"><span class="q">${ic("file","l")}</span>PDF</button></div>${homeConv()}`;
   if(noData())return h+`<div class="sec">${emptyState()}</div>`;
-  h+=pendBanner(al);
+  h+=homePend(al);
   const nf=flightsSorted().find(f=>{const t=ts(f.date,f.dep||"23:59",flightOrigin(f));return isNaN(t)||t>T.now;});
   if(nf)h+=fold("h-voo",`<h2>Próximo voo</h2><span class="fmeta">${esc(nf.frm)} → ${esc(nf.to)} · ${dShort(nf.date)}</span>`,`${bpHTML(nf)}<button class="see" data-a="resTab" data-v="voos" style="margin-top:8px">Ver todos os voos ›</button>`,true);
   const curCity=T.phase==="durante"?cityOfDay(todayFor()):T.phase==="antes"?"San Andrés":"Fortaleza";const rd=readiness();
@@ -1861,6 +1867,16 @@ function heroArt(){
     palm(W*.1,H*.97,H*.5,W*.06,Math.max(.8,W/420));palm(W*.9,H*1.02,H*.58,-W*.07,Math.max(.9,W/380));
     t+=.016;if(!reduce&&document.visibilityState==="visible")heroRAF=requestAnimationFrame(frame);};frame();
 }
+
+function homePend(al){const P=ckPending();const ps=prepStats();const d=daysBetween(todayISO(),TRIP.start);const prepN=todayISO()<=TRIP.end?ps.miss:0;const tot=P.length+al.length+(prepN?1:0);
+  if(!tot)return pendBanner([]);
+  const chips=[P.length?`Checklist ${P.length}`:"",al.length?`Reservas e gastos ${al.length}`:"",prepN?`Dados do app ${ps.pct}%`:""].filter(Boolean).join(" · ");
+  const head=`<span class="hp-ic">${ic("alert","s")}<i>${tot}</i></span><span class="ftitle"><b>${d>0?`Antes de viajar (faltam ${d} dias)`:"Pendências"}</b><small class="hp-sub">${chips}</small></span>`;
+  const row=x=>`<div class="hp-i ${x.urg?"u":""}" data-a="ckGo" data-v="${esc(x.cat)}" role="button" tabindex="0"><span class="hp-dot"></span><span class="grow">${esc(x.c.text)}${x.who.length?` <em>· falta ${esc(x.who.join(" e "))}</em>`:""}</span></div>`;
+  const body=`${P.length?`<div class="hp-sec"><div class="hp-st">${ic("check","s")} Checklist · ${P.length}</div>${P.slice(0,5).map(row).join("")}<button class="btn sm block" style="margin-top:6px" data-a="more" data-v="checklist">Abrir o checklist ${ic("chev","s")}</button></div>`:""}
+   ${al.length?`<div class="hp-sec"><div class="hp-st">${ic("wallet","s")} Reservas e gastos · ${al.length}</div>${al.slice(0,4).map(a=>`<div class="hp-i ${a.lvl==="bad"?"u":""}" data-a="alerts" role="button" tabindex="0"><span class="hp-dot"></span><span class="grow">${a.t}</span></div>`).join("")}<button class="btn sm block" style="margin-top:6px" data-a="alerts">Ver e resolver ${ic("chev","s")}</button></div>`:""}
+   ${prepN?`<div class="hp-sec"><div class="hp-st">${ic("list","s")} Dados do app · ${ps.pct}% pronto</div><div class="hp-i" data-a="more" data-v="prep" role="button" tabindex="0"><span class="hp-dot"></span><span class="grow">Faltam ${ps.miss} informações (hospedagens, voos, passeios e gastos)</span></div></div>`:""}`;
+  return`<div class="homepend">${fold("home-pend",head,body,false)}</div>`;}
 
 /* ===== PASSEIOS (radar) ===== */
 const TOUR_CATS=["passeio","aventura"];
