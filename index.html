@@ -954,6 +954,18 @@ button.levar{width:100%;border:0;text-align:left;font:inherit;cursor:pointer}
 .mhint{font-size:12px;margin-top:6px;padding:8px 10px;border-radius:10px;background:#eef6fb;color:#1d4f6e}
 .mc-v{font-size:13px;font-weight:700;color:var(--ok);margin-left:4px}
 .mi-cmp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.mi-cmp>div{background:#fff;border-radius:14px;padding:10px;box-shadow:var(--shadow);display:flex;flex-direction:column}.mi-cmp small{font-size:10.5px;font-weight:700;opacity:.65}.mi-cmp b{font-size:15px}.mi-cmp .mi-sv{background:#e8f6ef}.mi-cmp .mi-sv b{color:var(--ok)}
+.rs-mode{display:flex;gap:4px;background:#eef3f1;border-radius:12px;padding:3px;margin:12px 0 6px}.rs-mode button{flex:1;border:0;background:none;border-radius:9px;padding:7px 4px;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);opacity:.65}.rs-mode button[aria-pressed=true]{background:#fff;opacity:1;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.fd-l{max-height:none;margin-top:6px}.fd{padding:9px 0;border-top:1px solid #eef2f0}.fd:first-child{border-top:0}
+.fd-h{display:flex;align-items:baseline;gap:8px;font-size:13px}.fd-h>span{flex:1;min-width:0;font-size:11.5px;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fd-h>b:last-child{font-size:14px}
+.fd-c{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.fdc{border:1px dashed #c9d6d1;background:#fff;border-radius:99px;padding:5px 9px;font:inherit;font-size:12px;font-weight:600;color:var(--ink);opacity:.7}.fdc i{font-style:normal;font-weight:800;margin-left:2px}
+.fdc[aria-pressed=true]{border:1px solid transparent;background:#e2f4f1;color:#0b5f63;opacity:1}
+.fdc.vip{border:1px solid #f1e3b6;background:#fff8e1;color:#7a5a00;opacity:1}
+.rs-cities{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 2px}.rs-cities button{border:1px solid #d7e3df;background:#fff;border-radius:99px;padding:5px 9px;font:inherit;font-size:12px;font-weight:700;color:var(--ink);opacity:.55}.rs-cities button[aria-pressed=true]{background:#e2f4f1;border-color:transparent;color:#0b5f63;opacity:1}.rs-cities i{font-style:normal;opacity:.6;font-weight:600}
+.rsl-lanc{display:block;width:100%;text-align:left;border:0;background:#f1f8f4;border-radius:10px;padding:8px 10px;margin-top:10px;font:inherit;font-size:12px;color:var(--ok)}
+.rsl-pre .rs-sug{background:#fff8e1;border-color:#f1e3b6;color:#7a5a00}
+.rs-cu .rsl-h{gap:8px}.cu-n{flex:1;min-width:0;border:1px solid #d7e3df;border-radius:10px;padding:8px 10px;font:inherit;font-weight:700}
+.mi-rates{background:#fff;border-radius:14px;padding:12px;margin:0 0 10px;box-shadow:var(--shadow)}.mi-rg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}.mi-rg label{display:flex;align-items:center;justify-content:space-between;gap:6px;background:#f4f8f6;border-radius:10px;padding:6px 8px;font-size:12.5px;font-weight:700}.mi-in{display:flex;align-items:center;gap:3px;font-weight:600;opacity:.8}.mi-in input{width:46px;border:1px solid #d7e3df;border-radius:8px;padding:5px;font:inherit;text-align:right}
 </style>
 
 <div class="wrap" id="app" aria-live="polite"></div>
@@ -1295,8 +1307,10 @@ function lines(){
 const EACH="Cada um";const pagouTxt=p=>p===EACH?"cada um pagou o seu":"pagou "+p;
 function flightPax(f){if(f.ppx&&Object.keys(f.ppx).length)return Object.keys(f.ppx);return splitOf(f);}
 function flightHoles(G){const L=lines();const filled=f=>{const x=f.ppx&&f.ppx[G];return x&&((x.v!==""&&x.v!=null)||+x.pts);};return flightsSorted().filter(f=>flightPax(f).includes(G)&&!filled(f)&&!L.some(l=>l.src==="flights"&&l.id===f.id&&l.split.includes(G))).map(f=>({src:"flights",id:f.id,desc:`Voo ${f.frm} → ${f.to}`,date:f.date,cat:"Passagens",mine:0,brl:0,split:[G],pay:"sem valor",hole:true}));}
-const MRATE={Smiles:17,TudoAzul:16,"LATAM Pass":25};const MDEF=17;
-const milesBRL=(pts,prog)=>(+pts||0)/1000*(MRATE[prog]||MDEF);
+const MRATE0={Smiles:17,TudoAzul:16,"LATAM Pass":25,Outro:17};const MPROGS=Object.keys(MRATE0);
+const mrate=p=>{const r=(settings().milesRates||{});const v=r[p]??MRATE0[p];return v!=null&&v!==""?+v:(+(r.Smiles??MRATE0.Smiles));};
+const MDEF=17;
+const milesBRL=(pts,prog)=>(+pts||0)/1000*mrate(prog||"Outro");
 function milesOf(G){const out=[];let cur=null;const add=(src,id,desc,date,pts,how)=>{if(+pts>0)out.push({src,id,desc,date,pts:Math.round(+pts),how,prog:cur||"",brl:milesBRL(pts,cur)});};
   Object.entries(S.flights).forEach(([id,f])=>{cur=f.prog||"";const d=`Voo ${f.frm} → ${f.to}`;if(f.ppx&&Object.keys(f.ppx).length){const x=f.ppx[G];if(x)add("flights",id,d,f.date,x.pts,x.payer&&x.payer!==G?"milhas de "+x.payer:"");return;}const sp=splitOf(f);if(sp.includes(G))add("flights",id,d,f.date,f.perPerson?f.pts:(+f.pts||0)/sp.length,f.payer&&f.payer!==G&&f.payer!==EACH?"milhas de "+f.payer:"");});
   [["hotels","checkin",h=>"Hospedagem "+(h.name||h.city)],["tours","date",t=>t.title],["expenses","date",e=>e.desc]].forEach(([col,dk,nm])=>Object.entries(S[col]).forEach(([id,x])=>{if(!(+x.pts))return;cur=x.prog||"";const sp=splitOf(x);if(sp.includes(G))add(col,id,nm(x),x[dk],x.perPerson?x.pts:+x.pts/sp.length,x.payer&&x.payer!==G&&x.payer!==EACH?"milhas de "+x.payer:"");}));
@@ -3063,6 +3077,7 @@ function planCalc(G){const F=finance();const mine=F.L.filter(l=>l.split.includes
   const sum=f=>mine.filter(f).reduce((a,l)=>a+l.mine,0);
   const pago=sum(l=>l.pay==="pago"),prev=sum(l=>l.pay==="previsto"),falta=sum(l=>l.pay!=="pago"&&l.pay!=="previsto");
   const cats=PCATS.map(([c,i,lbl,hint])=>{const lanc=sum(l=>l.cat===c);const spent=sum(l=>l.cat===c&&l.pay==="pago"&&(l.date||"")>=TRIP.start&&l.src==="expenses");const ns=mine.filter(l=>l.cat===c).map(l=>l.desc.replace(/\s*\(.*?\)\s*/g," ").trim());const names=ns.slice(0,2).join(", ")+(ns.length>2?` e mais ${ns.length-2}`:"");const set=P[c]!=null&&P[c]!=="";const res=set?+P[c]||0:0;const left=Math.max(0,res-spent);return{c,i,lbl,hint,names,lanc,spent,res,left,set,sug:pSug(G,c)};});
+  Object.entries(P._cu||{}).forEach(([id,u])=>{const v=+u.v||0;cats.push({c:"_cu:"+id,i:"sparkle",lbl:u.n||"Outro gasto",hint:"",names:"",lanc:0,spent:0,res:v,left:v,set:true,cu:true,sug:0});});
   const reserve=cats.reduce((a,x)=>a+x.left,0);const days=dayList().filter(d=>travelersOn(d).includes(G)&&cityOfDay(d)!=="Fortaleza").length||1;
   return{pago,prev,falta,reserve,total:pago+prev+falta+reserve,levar:prev+falta+reserve,cats,days,anySet:cats.some(x=>x.set)};}
 function pDonut(segs,center,sub){const tot=segs.reduce((a,s)=>a+s.v,0)||1;let acc=0;const stops=segs.filter(s=>s.v>0).map(s=>{const a=acc/tot*360;acc+=s.v;return`${s.c} ${a.toFixed(2)}deg ${(acc/tot*360).toFixed(2)}deg`;}).join(",");
@@ -3078,7 +3093,7 @@ function planBlock(G){const C=planCalc(G);const cop=v=>{const c=v/rate("COP");re
    ${!C.anySet?`<div class="tip" style="margin-top:10px">${ic("info","s")} Coloque abaixo quanto quer reservar para comida, compras e imprevistos. Tem sugestão pronta, pelo roteiro.</div>`:""}
    <div style="margin-top:14px">${fold("g-prev",`<h2>Previsão por tipo</h2><span class="fmeta">${fmtBRL(C.cats.reduce((t,x)=>t+x.lanc+x.left,0))}</span>`,`
    ${ro?"":`<div class="pwho"><span>O que você digitar vale para:</span><div class="chips">${people().map(n=>`<button class="chip" data-a="planWho" data-v="${esc(n)}" aria-pressed="${planWho(G).includes(n)}">${planWho(G).includes(n)?ic("check","s")+" ":""}${esc(n)}</button>`).join("")}</div></div>`}
-   <div class="pcats">${C.cats.map(x=>{const pct=x.res?Math.min(100,x.spent/x.res*100):0;const tot=x.lanc+x.left;return`<div class="pcat"><div class="pc-h"><span class="pc-i">${ic(x.i,"s")}</span><div class="grow"><b>${esc(x.lbl)}</b><small>${esc(x.hint)}</small></div><div class="pc-tot"><small>previsto</small><b class="num">${fmtBRL(tot)}</b></div></div>
+   <div class="pcats">${C.cats.filter(x=>!x.cu).map(x=>{const pct=x.res?Math.min(100,x.spent/x.res*100):0;const tot=x.lanc+x.left;return`<div class="pcat"><div class="pc-h"><span class="pc-i">${ic(x.i,"s")}</span><div class="grow"><b>${esc(x.lbl)}</b><small>${esc(x.hint)}</small></div><div class="pc-tot"><small>previsto</small><b class="num">${fmtBRL(tot)}</b></div></div>
      <div class="pc-rows">${x.lanc?`<button class="pc-row" data-a="gCat" data-v="${x.c}"><span class="pc-k">Já nos gastos</span><span class="pc-d">${esc(x.names)}</span><b class="num">${fmtBRL(x.lanc)}</b>${ic("chev","s")}</button>`:""}
       <div class="pc-row"><span class="pc-k">${x.lanc?"+ Reserva extra":"Reserva"}</span><span class="pc-d">${!x.set&&x.sug&&!ro?`<button class="see" data-a="planSug" data-v="${x.c}|${esc(G)}">sugestão: ${fmtBRL(x.sug)}</button>`:""}</span><label class="pc-in"><span>R$</span><input type="text" inputmode="numeric" enterkeyhint="done" data-plan="${x.c}" value="${x.set?Math.round(x.res):""}" placeholder="0" ${ro?"disabled":""} aria-label="Reserva de ${esc(x.lbl)}"></label>${x.set&&!ro?`<button class="pc-del" data-a="planDel" data-v="${x.c}" aria-label="Apagar reserva de ${esc(x.lbl)}" title="Apagar reserva">${ic("trash","s")}</button>`:""}</div></div>
      ${x.res?`<div class="pc-bar"><span style="width:${pct.toFixed(1)}%"></span></div><div class="pc-f"><span>${x.spent?`anotado na viagem: ${fmtBRL(x.spent)}`:"nada anotado na viagem ainda"}</span><span>${x.left?`sobra ${fmtBRL(x.left)} · ≈ ${fmtBRL(x.left/C.days)}/dia`:x.spent>x.res?`<b style="color:var(--coral)">passou ${fmtBRL(x.spent-x.res)}</b>`:"usada"}</span></div>`:""}</div>`;}).join("")}</div>
@@ -3097,7 +3112,7 @@ function missingVals(G){const out=[];const inS=x=>splitOf(x).includes(G);
   Object.entries(S.hotels).forEach(([id,h])=>{if(!(+h.price)&&!(+h.pts)&&inS(h))out.push({c:"hotels",id,t:h.name||("Hospedagem "+h.city),d:h.checkin,hint:"hospedagem"});});
   flightHoles(G).forEach(h=>{const f=S.flights[h.id];if(f&&!f.ppx&&+f.pts)return;out.push({c:"flights",id:h.id,t:h.desc,d:h.date,hint:"voo sem valor para "+G});});
   return out.sort((a,b)=>(a.d||"").localeCompare(b.d||""));}
-function planList(kind,G){if(kind!=="res")ui.resG=null;const F=finance();const mine=F.L.filter(l=>l.split.includes(G)).map(l=>({...l,mine:l.brl/(l.split.length||1)}));const C=planCalc(G);
+function planList(kind,G){if(kind!=="res")ui.resG=null;else rsMigrate();const F=finance();const mine=F.L.filter(l=>l.split.includes(G)).map(l=>({...l,mine:l.brl/(l.split.length||1)}));const C=planCalc(G);
   const T={pago:["Já pago","var(--ok)",l=>l.pay==="pago","A parte de "+G+" no que já foi pago, por quem quer que tenha pago."],falta:["Falta pagar","var(--coral)",l=>l.pay!=="pago"&&l.pay!=="previsto","Valor certo, mas ainda não pago. Mude para “pago” quando pagar."],prev:["Estimado em Gastos","var(--sun)",l=>l.pay==="previsto","Chutes já lançados. Ajuste o valor quando souber o real."]};
   const icn=l=>ic(l.src==="flights"?"plane":l.src==="hotels"?"bed":l.src==="tours"?"compass":"wallet","s");
   const rowL=l=>`<div class="li" data-a="edit" data-c="${l.src}" data-id="${l.id}" role="button" tabindex="0"><span class="badge">${icn(l)}</span><div class="grow"><div style="font-weight:700">${esc(l.desc)}</div><div class="small muted">${dShort(l.date)} · ${esc(l.cat)}${l.split.length>1?` · ÷${l.split.length}`:""}${l.payer?" · "+esc(pagouTxt(l.payer)):""}</div></div><div style="text-align:right"><div class="num" style="font-weight:800">${fmtBRL(l.mine)}</div>${l.split.length>1?`<div class="small muted num">de ${fmtBRL(l.brl)}</div>`:""}</div></div>`;
@@ -3115,35 +3130,73 @@ function planList(kind,G){if(kind!=="res")ui.resG=null;const F=finance();const m
   openSheet(`<div class="between" style="margin-bottom:8px"><span class="eyebrow">${esc(G)}</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div>
   <div class="pl-head" style="--c:${color}"><span>${esc(title)}</span><b class="num">${fmtBRL(total)}</b></div>${body}`);}
 
-/* ---- reserva por dia (arrastar) ---- */
-const RSL={Alimentação:[400,10,[80,100,150,200,250]],Transporte:[150,5,[20,40,60,80]],Compras:[150,5,[10,20,40,60]],Taxas:[150,5,[10,20,40]],Extras:[100,5,[10,20,30]]};
+/* ---- reserva do dia a dia: editor inteligente ---- */
+const RSDEF={Alimentação:{mode:"dias"},Transporte:{mode:"dia",pd:0,skip:["San Andrés"]},Compras:{mode:"total"},Taxas:{mode:"total"},Extras:{mode:"total"}};
+const RSTOT={Compras:[2000,50,[100,200,300,500]],Taxas:[1000,10,[50,100,200]],Extras:[1500,50,[100,200,300]]};
+const RSPD={Alimentação:[400,10,[80,100,150,200]],Transporte:[150,5,[20,40,60]]};
 const daysOf=G=>dayList().filter(d=>travelersOn(d).includes(G)&&cityOfDay(d)!=="Fortaleza").length||1;
 const copTxt=v=>{const c=v/(rate("COP")||0.0016);return c>=1e6?`COP ${(c/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})} mi`:`COP ${Math.round(c/1000)} mil`;};
-function resEditor(G,C){const ro=conn==="snapshot";const W=planWho(G);const all=people();const D=C.days;
-  const who=`<div class="rs-who"><span>Vale para</span>${all.map(n=>`<button type="button" class="chip" data-a="rsWho" data-v="${esc(n)}" aria-pressed="${W.includes(n)}" ${ro?"disabled":""}>${W.includes(n)?"✓ ":""}${esc(n)}</button>`).join("")}</div>`;
-  const cards=C.cats.map(x=>{const[mx,st,pre]=RSL[x.c]||[200,5,[]];const pd=x.set?Math.round(x.res/D):0;const max=Math.max(mx,pd);
-    return`<div class="rsl${x.set?" on":""}" data-rs="${x.c}" data-spent="${x.spent}" data-days="${D}">
-     <div class="rsl-h"><span class="pc-i">${ic(x.i,"s")}</span><div class="grow"><b>${esc(x.lbl)}</b><small>${esc(x.hint)}</small></div><div class="rsl-tot"><b class="num" data-o="tot">${fmtBRL(x.set?x.res:0)}</b><small data-o="cop">${pd?"≈ "+copTxt(x.res):"sem reserva"}</small></div></div>
-     <div class="rsl-pd"><span class="num"><b data-o="pd">R$ ${pd}</b> por dia</span><span class="muted">× ${D} dias</span><span class="muted" data-o="pdc" style="margin-left:auto">${pd?"≈ "+copTxt(pd)+"/dia":""}</span></div>
-     <input type="range" class="rs-range" data-rsr="${x.c}" min="0" max="${max}" step="${st}" value="${pd}" style="--p:${(pd/max*100).toFixed(1)}%" ${ro?"disabled":""} aria-label="${esc(x.lbl)} por dia">
-     <div class="rsl-pre">${pre.map(v=>`<button type="button" data-a="rsSet" data-v="${x.c}|${v}" ${ro?"disabled":""}>${v}/dia</button>`).join("")}${x.set&&!ro?`<button type="button" class="rs-del" data-a="rsDel" data-v="${x.c}">${ic("trash","s")} Apagar</button>`:""}</div>
-     ${x.spent?`<div class="rsl-sp">Já anotado na viagem: <b>${fmtBRL(x.spent)}</b> · <span data-o="left">${x.res>=x.spent?"sobra "+fmtBRL(x.res-x.spent):"passou "+fmtBRL(x.spent-x.res)}</span></div>`:""}
-    </div>`;}).join("");
-  const sumPD=C.cats.reduce((a,x)=>a+(x.set?Math.round(x.res/D):0),0);
-  return`<p class="small muted" style="margin:0 0 10px">Arraste para escolher quanto cada um vai gastar <b>por dia</b> em cada tipo. É o dinheiro do bolso para levar. Cada gasto anotado durante a viagem sai daqui.</p>${who}
-   <div class="rs-sum"><div><small>Por dia, por pessoa</small><b class="num" data-o="sumpd">${fmtBRL(sumPD)}</b></div><div><small>${D} dias · ${esc(G)}</small><b class="num" data-o="sumtot">${fmtBRL(C.cats.reduce((a,x)=>a+(x.set?x.res:0),0))}</b><small data-o="sumcop">≈ ${copTxt(C.cats.reduce((a,x)=>a+(x.set?x.res:0),0))}</small></div></div>
-   ${cards}`;}
-function rsPaint(el,pd){const D=+el.dataset.days;const r=el.querySelector("input[type=range]");if(r){if(pd>+r.max)r.max=pd;r.value=pd;r.style.setProperty("--p",(pd/ +r.max*100).toFixed(1)+"%");}
-  const q=k=>el.querySelector(`[data-o="${k}"]`);q("tot").textContent=fmtBRL(pd*D);q("cop").textContent=pd?"≈ "+copTxt(pd*D):"sem reserva";q("pd").textContent="R$ "+pd;q("pdc").textContent=pd?"≈ "+copTxt(pd)+"/dia":"";
-  const sp=+el.dataset.spent,l=q("left");if(l)l.textContent=pd*D>=sp?"sobra "+fmtBRL(pd*D-sp):"passou "+fmtBRL(sp-pd*D);el.classList.toggle("on",pd>0);
-  const box=el.closest("#sheetForm");if(!box)return;let tot=0;box.querySelectorAll(".rsl").forEach(x=>{const v=+x.querySelector("input[type=range]").value;tot+=v;});const D0=D;
-  const o=k=>box.querySelector(`[data-o="${k}"]`);if(o("sumpd"))o("sumpd").textContent=fmtBRL(tot);if(o("sumtot"))o("sumtot").textContent=fmtBRL(tot*D0);if(o("sumcop"))o("sumcop").textContent="≈ "+copTxt(tot*D0);}
-async function rsSave(c,pd,reopen){const G=ui.resG||ui.gp;const W=planWho(G);const all=JSON.parse(JSON.stringify(S.meta.plan||{}));W.forEach(n=>{all[n]=all[n]||{};if(!pd)delete all[n][c];else all[n][c]=Math.round(pd*daysOf(n));});
-  const ok=await write("meta","plan",all);if(ok===false)return;toast(`${PCATS.find(x=>x[0]===c)[2]}: ${pd?`R$ ${pd}/dia`:"apagado"} para ${W.join(" e ")}`);if(reopen)rsReopen();}
+const rsCfg=(G,c)=>Object.assign({},RSDEF[c]||{mode:"total"},((planOf(G)._cfg||{})[c])||{});
+const gDays=G=>dayList().filter(d=>travelersOn(d).includes(G));
+function cityDays(G){const o={};gDays(G).forEach(d=>{const c=cityOfDay(d);if(c!=="Fortaleza")o[c]=(o[c]||0)+1;});return o;}
+/* refeições de cada dia, em R$ por pessoa */
+function foodDay(d,ov){const M=dayMoney(d);const cv=v=>M.cur==="COP"?toBRL(v,"COP"):v;const fl=flightsSorted().filter(f=>f.date===d);const out=[];
+  M.items.filter(i=>i.g==="Comida").forEach(i=>{const k=/^Almoço/i.test(i.t)?"l":/^Jantar/i.test(i.t)?"j":/^Água/i.test(i.t)?"s":"n"+out.length;out.push({k,t:i.t.replace(/^Água, lanches e sorvete$/,"Água e lanches"),v:Math.round(cv(i.v)/5)*5,on:i.v>0,vip:i.v===0});});
+  const has=k=>out.some(x=>x.k===k);const ap=fl.length?" no aeroporto":"";
+  if(!has("l"))out.push({k:"l",t:"Almoço"+ap,v:fl.length?55:45,on:false});
+  if(!has("j"))out.push({k:"j",t:"Jantar"+ap,v:fl.length?60:50,on:false});
+  if(!has("s")&&fl.length)out.push({k:"s",t:"Lanche/água no aeroporto",v:25,on:false});
+  const o=(ov||{})[d]||{};out.forEach(x=>{if(x.vip)return;if(o[x.k]!=null)x.on=!!o[x.k];});
+  const ord={l:0,j:1,s:2};out.sort((a,b)=>(ord[a.k]??3)-(ord[b.k]??3));
+  return{d,city:cityOfDay(d),fl,items:out,tot:out.filter(x=>x.on&&!x.vip).reduce((a,x)=>a+x.v,0)};}
+function rsTotal(G,c,cfg){if(c==="Alimentação"&&cfg.mode==="dias")return gDays(G).reduce((a,d)=>a+foodDay(d,cfg.food).tot,0);
+  if(cfg.mode==="dia"){const cd=cityDays(G);const n=Object.entries(cd).filter(([k])=>!(cfg.skip||[]).includes(k)).reduce((a,[,v])=>a+v,0);return Math.round((+cfg.pd||0)*n);}
+  return Math.round(+cfg.v||0);}
+function taxSug(G){let s=0;gDays(G).forEach(d=>{const M=dayMoney(d);M.items.filter(i=>(i.g==="Taxas"||i.g==="Entradas")&&!/Tarjeta/i.test(i.t)).forEach(i=>{s+=M.cur==="COP"?toBRL(i.vv,"COP"):i.vv;});});return Math.round(s/10)*10;}
+function rsSaveCfg(c,patch){const G=ui.resG||ui.gp;const W=planWho(G);const all=JSON.parse(JSON.stringify(S.meta.plan||{}));const base=Object.assign(rsCfg(G,c),patch);
+  W.forEach(n=>{const P=all[n]=all[n]||{};P._cfg=P._cfg||{};P._cfg[c]=JSON.parse(JSON.stringify(base));const t=rsTotal(n,c,base);if(t>0)P[c]=t;else delete P[c];});
+  write("meta","plan",all);rsReopen();}
+function rsCu(op,id,patch){const G=ui.resG||ui.gp;const W=planWho(G);const all=JSON.parse(JSON.stringify(S.meta.plan||{}));if(op==="add")id="u"+Date.now().toString(36);
+  W.forEach(n=>{const P=all[n]=all[n]||{};P._cu=P._cu||{};if(op==="del")delete P._cu[id];else P._cu[id]=Object.assign(P._cu[id]||{n:"Outro gasto",v:0},patch||{});});write("meta","plan",all);rsReopen();if(op==="add")setTimeout(()=>{const e=document.querySelector(`[data-cun="${id}"]`);if(e){e.focus();e.select();}},80);}
 function rsReopen(){if(!ui.resG||$("#sheet").hidden)return;const f=$("#sheetForm"),y=f.scrollTop;planList("res",ui.resG);f.scrollTop=y;}
 function rsWho(n){const G=ui.resG;const w=planWho(G).slice();const i=w.indexOf(n);if(i>=0){if(n===G){toast("A pessoa da tela sempre recebe o valor");return;}w.splice(i,1);}else w.push(n);ui.planWho=w;rsReopen();}
-document.addEventListener("input",e=>{const r=e.target.closest&&e.target.closest("[data-rsr]");if(!r)return;rsPaint(r.closest(".rsl"),+r.value);});
-document.addEventListener("change",e=>{const r=e.target.closest&&e.target.closest("[data-rsr]");if(!r)return;rsSave(r.dataset.rsr,+r.value,!r.closest(".rsl").querySelector(".rs-del")||+r.value===0);});
+const rsRange=(c,val,max,st,lbl)=>`<input type="range" class="rs-range" data-rsr="${c}" min="0" max="${Math.max(max,val)}" step="${st}" value="${val}" style="--p:${(val/Math.max(max,val,1)*100).toFixed(1)}%" ${conn==="snapshot"?"disabled":""} aria-label="${esc(lbl)}">`;
+function resEditor(G,C){const ro=conn==="snapshot";const W=planWho(G);const cd=cityDays(G);const P=planOf(G);
+  const who=`<div class="rs-who"><span>Vale para</span>${people().map(n=>`<button type="button" class="chip" data-a="rsWho" data-v="${esc(n)}" aria-pressed="${W.includes(n)}" ${ro?"disabled":""}>${W.includes(n)?"✓ ":""}${esc(n)}</button>`).join("")}</div>`;
+  const sumT=C.cats.reduce((a,x)=>a+(x.set?x.res:0),0);
+  const head=(x,tot,sub)=>`<div class="rsl-h"><span class="pc-i">${ic(x.i,"s")}</span><div class="grow"><b>${esc(x.lbl)}</b><small>${sub}</small></div><div class="rsl-tot"><b class="num" data-o="tot">${fmtBRL(tot)}</b><small data-o="cop">${tot?"≈ "+copTxt(tot):"nada reservado"}</small></div></div>`;
+  const lancH=x=>x.lanc?`<button type="button" class="rsl-lanc" data-a="gCat" data-v="${x.c}">${ic("check","s")} Já nos gastos: <b>${fmtBRL(x.lanc)}</b> · ${esc(x.names)}</button>`:"";
+  const spH=x=>x.spent?`<div class="rsl-sp">Anotado na viagem: <b>${fmtBRL(x.spent)}</b> · ${x.res>=x.spent?"sobra "+fmtBRL(x.res-x.spent):"passou "+fmtBRL(x.spent-x.res)}</div>`:"";
+  const cards=C.cats.filter(x=>!x.cu).map(x=>{const c=x.c,cfg=rsCfg(G,c),tot=x.set?x.res:0;
+    if(c==="Alimentação"){const modes=`<div class="rs-mode"><button type="button" data-a="rsMode" data-v="${c}|dias" aria-pressed="${cfg.mode==="dias"}">Dia a dia</button><button type="button" data-a="rsMode" data-v="${c}|dia" aria-pressed="${cfg.mode==="dia"}">Mesmo valor todo dia</button></div>`;
+      if(cfg.mode==="dias"){const days=gDays(G).map(d=>foodDay(d,cfg.food));
+        const rows=days.map(D=>`<div class="fd"><div class="fd-h"><b>${WD[wd(D.d)]} ${dShort(D.d)}</b><span>${esc(D.city)}${D.fl.length?` · ✈ ${D.fl.map(f=>`${esc(f.frm)}→${esc(f.to)} ${esc(f.dep||"")}`).join(", ")}`:""}</span><b class="num">${fmtBRL(D.tot)}</b></div><div class="fd-c">${D.items.map(it=>it.vip?`<span class="fdc vip">${esc(it.t)} · incluído</span>`:`<button type="button" class="fdc" data-a="rsMeal" data-v="${D.d}|${it.k}|${it.on?0:1}" aria-pressed="${it.on}" ${ro?"disabled":""}>${it.on?"✓ ":"+ "}${esc(it.t)} <i>R$ ${it.v}</i></button>`).join("")}</div></div>`).join("");
+        return`<div class="rsl on" data-rs="${c}">${head(x,tot,`${days.length} dias · toque nas refeições para tirar ou pôr`)}${modes}<div class="fd-l">${rows}</div><p class="small muted" style="margin:8px 0 0">Valores médios por pessoa. Dias de voo e sala VIP já vêm descontados. O 10% de serviço do restaurante entra aqui.</p>${lancH(x)}${spH(x)}</div>`;}
+      const[mx,st,pre]=RSPD[c];const n=Object.entries(cd).filter(([k])=>!(cfg.skip||[]).includes(k)).reduce((a,[,v])=>a+v,0);
+      return`<div class="rsl${tot?" on":""}" data-rs="${c}" data-n="${n}">${head(x,tot,"valor igual em todos os dias")}${modes}${pdBlock(c,cfg,cd,mx,st,pre,x.lbl,n)}${lancH(x)}${spH(x)}</div>`;}
+    if(cfg.mode==="dia"){const[mx,st,pre]=RSPD[c]||[150,5,[20,40]];const n=Object.entries(cd).filter(([k])=>!(cfg.skip||[]).includes(k)).reduce((a,[,v])=>a+v,0);
+      return`<div class="rsl${tot?" on":""}" data-rs="${c}" data-n="${n}">${head(x,tot,"extra além do que já está nos gastos")}${lancH(x)}${pdBlock(c,cfg,cd,mx,st,pre,x.lbl,n)}${spH(x)}</div>`;}
+    const[mx,st,pre]=RSTOT[c]||[1000,50,[100,200]];const v=Math.round(+cfg.v||(x.set?x.res:0));const sg=c==="Taxas"?taxSug(G):0;
+    const sub={Compras:"valor para a viagem toda, não por dia",Taxas:"entradas, cayos, banheiro, taxa portuária",Extras:"folga para imprevistos e gorjetas"}[c]||"";
+    return`<div class="rsl${tot?" on":""}" data-rs="${c}" data-n="1">${head(x,tot,sub)}${lancH(x)}<div class="rsl-pd"><span class="num"><b data-o="pd">${fmtBRL(v)}</b> na viagem toda</span></div>${rsRange(c,v,mx,st,x.lbl)}<div class="rsl-pre">${pre.map(p=>`<button type="button" data-a="rsTot" data-v="${c}|${p}" ${ro?"disabled":""}>R$ ${p}</button>`).join("")}${sg?`<button type="button" class="rs-sug" data-a="rsTot" data-v="${c}|${sg}">pelo roteiro: R$ ${sg}</button>`:""}${tot&&!ro?`<button type="button" class="rs-del" data-a="rsTot" data-v="${c}|0">${ic("trash","s")}</button>`:""}</div>${c==="Taxas"?`<p class="small muted" style="margin:6px 0 0">Os 10% de serviço vêm na conta do restaurante (já contam em Comida). Aqui é só o que se paga em alguns lugares.</p>`:""}${spH(x)}</div>`;}).join("");
+  const cus=C.cats.filter(x=>x.cu).map(x=>{const id=x.c.slice(4);return`<div class="rsl on rs-cu"><div class="rsl-h"><span class="pc-i">${ic("sparkle","s")}</span><input class="cu-n" data-cun="${id}" value="${esc(x.lbl)}" ${ro?"disabled":""} aria-label="Nome do gasto"><label class="pc-in"><span>R$</span><input inputmode="numeric" data-cuv="${id}" value="${Math.round(x.res)||""}" placeholder="0" ${ro?"disabled":""}></label>${ro?"":`<button type="button" class="pc-del" data-a="rsCuDel" data-v="${id}" aria-label="Apagar">${ic("trash","s")}</button>`}</div></div>`;}).join("");
+  return`<p class="small muted" style="margin:0 0 10px">Dinheiro do bolso para levar, além do que já está nos gastos. Cada tipo funciona do jeito que faz sentido: comida <b>dia a dia</b>, transporte <b>por dia nas cidades que precisar</b>, compras e taxas <b>valor da viagem toda</b>.</p>${who}
+   <div class="rs-sum"><div><small>Média por dia</small><b class="num" data-o="sumpd">${fmtBRL(sumT/(C.days||1))}</b><small>${C.days} dias fora</small></div><div><small>Reserva de ${esc(G)}</small><b class="num" data-o="sumtot">${fmtBRL(sumT)}</b><small data-o="sumcop">≈ ${copTxt(sumT)}</small></div></div>
+   ${cards}${cus}${ro?"":`<button type="button" class="btn block" data-a="rsCuAdd" style="margin-top:4px">${ic("plus","s")} Adicionar outro gasto (balada, mergulho extra…)</button>`}`;}
+function pdBlock(c,cfg,cd,mx,st,pre,lbl,n){const pd=+cfg.pd||0;const ro=conn==="snapshot";
+  return`<div class="rs-cities">${Object.entries(cd).map(([k,v])=>{const on=!(cfg.skip||[]).includes(k);return`<button type="button" data-a="rsCity" data-v="${c}|${esc(k)}" aria-pressed="${on}" ${ro?"disabled":""}>${on?"✓ ":""}${esc(k)} <i>${v}d</i></button>`;}).join("")}</div>
+   <div class="rsl-pd"><span class="num"><b data-o="pd">R$ ${pd}</b> por dia</span><span class="muted">× ${n} dias</span></div>${rsRange(c,pd,mx,st,lbl+" por dia")}
+   <div class="rsl-pre">${pre.map(v=>`<button type="button" data-a="rsPd" data-v="${c}|${v}" ${ro?"disabled":""}>${v}/dia</button>`).join("")}${pd&&!ro?`<button type="button" class="rs-del" data-a="rsPd" data-v="${c}|0">${ic("trash","s")}</button>`:""}</div>`;}
+document.addEventListener("input",e=>{const r=e.target.closest&&e.target.closest("[data-rsr]");if(!r)return;const el=r.closest(".rsl");const v=+r.value;const n=+el.dataset.n||1;const cfg=rsCfg(ui.resG||ui.gp,r.dataset.rsr);const tot=cfg.mode==="total"?v:v*n;
+  r.style.setProperty("--p",(v/ +r.max*100).toFixed(1)+"%");const q=k=>el.querySelector(`[data-o="${k}"]`);q("tot").textContent=fmtBRL(tot);q("cop").textContent=tot?"≈ "+copTxt(tot):"nada reservado";q("pd").textContent=cfg.mode==="total"?fmtBRL(v):"R$ "+v;});
+document.addEventListener("change",e=>{const r=e.target.closest&&e.target.closest("[data-rsr]");if(r){const c=r.dataset.rsr;const cfg=rsCfg(ui.resG||ui.gp,c);rsSaveCfg(c,cfg.mode==="total"?{v:+r.value}:{pd:+r.value});return;}
+  const n=e.target.closest&&e.target.closest("[data-cun]");if(n){rsCu("set",n.dataset.cun,{n:n.value.trim()||"Outro gasto"});return;}
+  const v=e.target.closest&&e.target.closest("[data-cuv]");if(v){rsCu("set",v.dataset.cuv,{v:+String(v.value).replace(/\D/g,"")||0});}});
+function rsMigrate(){if(conn==="snapshot")return;const all=JSON.parse(JSON.stringify(S.meta.plan||{}));let ch=false;
+  Object.entries(all).forEach(([n,P])=>{if(!P||typeof P!=="object")return;P._cfg=P._cfg||{};PCATS.forEach(([c])=>{if(P._cfg[c]||P[c]==null||P[c]==="")return;const v=+P[c]||0;let cfg;
+    if(c==="Alimentação")cfg={mode:"dias"};else if((RSDEF[c]||{}).mode==="dia"){const cd=cityDays(n);const sk=RSDEF[c].skip||[];const k=Object.entries(cd).filter(([x])=>!sk.includes(x)).reduce((a,[,y])=>a+y,0)||1;cfg={mode:"dia",pd:Math.round(v/k),skip:sk};}else cfg={mode:"total",v};
+    P._cfg[c]=cfg;const t=rsTotal(n,c,cfg);if(t>0)P[c]=t;else delete P[c];ch=true;});});
+  if(ch)write("meta","plan",all);}
 
 
 /* ===== GASTO ANOTADO x GASTO PREVISTO: considerar um só ===== */
@@ -3403,8 +3456,13 @@ document.addEventListener("click",async e=>{
    case"ckGo":{ui.tab="mais";ui.more="checklist";ui.fold=ui.fold||{};render();setTimeout(()=>{const e=document.querySelector(`[data-fold="ck-${CSS.escape(v)}"]`);if(e){if(!e.classList.contains("open")){const h=e.querySelector(".fold-h");if(h)h.click();}e.scrollIntoView({behavior:"smooth",block:"start"});}},80);break;}
    case"milesOpen":milesSheet(v);break;
    case"planDel":planSet(v,"");break;
-   case"rsSet":{const[c,pd]=v.split("|");const el=document.querySelector(`.rsl[data-rs="${c}"]`);if(el)rsPaint(el,+pd);rsSave(c,+pd,!(el&&el.querySelector(".rs-del")));break;}
-   case"rsDel":rsSave(v,0,true);break;
+   case"rsMode":{const[c,m]=v.split("|");rsSaveCfg(c,{mode:m});break;}
+   case"rsMeal":{const[d,k,on]=v.split("|");const cfg=rsCfg(ui.resG||ui.gp,"Alimentação");const food=JSON.parse(JSON.stringify(cfg.food||{}));food[d]=food[d]||{};food[d][k]=on==="1";rsSaveCfg("Alimentação",{food});break;}
+   case"rsCity":{const[c,k]=v.split("|");const cfg=rsCfg(ui.resG||ui.gp,c);const sk=new Set(cfg.skip||[]);sk.has(k)?sk.delete(k):sk.add(k);rsSaveCfg(c,{skip:[...sk]});break;}
+   case"rsPd":{const[c,x]=v.split("|");rsSaveCfg(c,{pd:+x});break;}
+   case"rsTot":{const[c,x]=v.split("|");rsSaveCfg(c,{v:+x});break;}
+   case"rsCuAdd":rsCu("add");break;
+   case"rsCuDel":rsCu("del",v);break;
    case"rsWho":rsWho(v);break;
    case"planList":{const[k,G]=v.split("|");planList(k,G);break;}
    case"planAll":planAllSug(v);break;
@@ -3478,14 +3536,16 @@ function ppxOf(d){if(d.ppx&&Object.keys(d.ppx).length)return d.ppx;const sp=(d.s
 document.addEventListener("change",e=>{const c=e.target.closest&&e.target.closest("[data-ppc]");if(c){const s=$("#ppxSum");if(s)s.innerHTML=ppxSummary(ppxRead());}});
 
 /* ---- milhas: programa e valor aproximado ---- */
-function milesSheet(G){const Mi=milesOf(G);const tot=Mi.reduce((s,x)=>s+x.pts,0),val=Mi.reduce((s,x)=>s+x.brl,0);const PC=planCalc(G);const noP=Mi.filter(x=>!x.prog).length;
+function milesSheet(G){ui.milesG=G;const Mi=milesOf(G);const tot=Mi.reduce((s,x)=>s+x.pts,0),val=Mi.reduce((s,x)=>s+x.brl,0);const PC=planCalc(G);const noP=Mi.filter(x=>!x.prog).length;
   openSheet(`<div class="between" style="margin-bottom:8px"><span class="eyebrow">${esc(G)}</span><button type="button" class="btn icon" data-a="closeSheet" aria-label="Fechar">${ic("x")}</button></div><div class="pl-head" style="--c:var(--info)"><span>Milhas usadas</span><b class="num">${tot.toLocaleString("pt-BR")}</b></div>
   <div class="mi-cmp"><div><small>Com milhas</small><b class="num">${fmtBRL(PC.total)}</b></div><div><small>Sem milhas (aprox.)</small><b class="num">${fmtBRL(PC.total+val)}</b></div><div class="mi-sv"><small>Economia</small><b class="num">${fmtBRL(val)}</b></div></div>
-  <p class="small muted" style="margin:8px 0 10px">Só para ter noção. Valor do milheiro: Smiles R$ 17 · TudoAzul R$ 16 · LATAM Pass R$ 25.${noP?` ${noP} sem programa: contei a R$ ${MDEF}.`:""} As taxas em reais continuam nos gastos.</p>
+  <p class="small muted" style="margin:8px 0 10px">Só para ter noção. ${noP?`${noP} sem programa: contei como “Outro”. `:""}As taxas em reais continuam nos gastos.</p>
+  <div class="mi-rates"><div class="eyebrow" style="margin-bottom:6px">Valor do milheiro (1.000 milhas)</div><div class="mi-rg">${MPROGS.map(p=>`<label><span>${esc(p)}</span><span class="mi-in">R$ <input inputmode="decimal" data-mrate="${esc(p)}" value="${mrate(p)}" ${conn==="snapshot"?"disabled":""}></span></label>`).join("")}</div><small class="muted">Mude se pagou mais ou menos pelo milheiro. Recalcula tudo.</small></div>
   <div class="card" style="padding:4px 14px">${Mi.map(x=>`<div class="li" data-a="edit" data-c="${x.src}" data-id="${x.id}" role="button" tabindex="0"><span class="badge">${ic(x.src==="flights"?"plane":x.src==="hotels"?"bed":"wallet","s")}</span><div class="grow"><div style="font-weight:700">${esc(x.desc)}</div><div class="small muted">${dShort(x.date)} · ${x.prog?esc(x.prog):`<span style="color:var(--coral)">escolha o programa</span>`}${x.how?" · "+esc(x.how):""}</div></div><div style="text-align:right"><b class="num">${x.pts.toLocaleString("pt-BR")}</b><div class="small muted num">≈ ${fmtBRL(x.brl)}</div></div></div>`).join("")}</div>`);}
 function progHint(){const f=$("#sheetForm");if(!f)return;const sel=f.querySelector("#f_prog");if(!sel)return;let pts=0;const p=f.querySelector("#f_pts");if(p)pts=+parseNum(p.value||"")||0;else f.querySelectorAll("[data-ppp]").forEach(i=>{pts+=+parseNum(i.value||"")||0;});
   let h=f.querySelector("#progHint");if(!h){h=document.createElement("div");h.id="progHint";h.className="mhint";sel.closest(".f").appendChild(h);}
-  const r=MRATE[sel.value];h.innerHTML=!pts?`Smiles R$ 17 · TudoAzul R$ 16 · LATAM R$ 25 o milheiro`:`${pts.toLocaleString("pt-BR")} milhas ≈ <b>${fmtBRL(milesBRL(pts,sel.value))}</b>${r?` (R$ ${r} o milheiro)`:` (contando R$ ${MDEF} o milheiro)`} · não entra no dinheiro`;}
+  const pr=sel.value||"Outro";h.innerHTML=!pts?MPROGS.slice(0,3).map(p=>`${p} R$ ${mrate(p)}`).join(" · ")+" o milheiro":`${pts.toLocaleString("pt-BR")} milhas ≈ <b>${fmtBRL(milesBRL(pts,pr))}</b> (R$ ${mrate(pr)} o milheiro${sel.value?"":", escolha o programa"}) · não entra no dinheiro`;}
+document.addEventListener("change",e=>{const i=e.target.closest&&e.target.closest("[data-mrate]");if(!i)return;const s=JSON.parse(JSON.stringify(settings()));s.milesRates=s.milesRates||{};const v=parseNum(i.value);if(v===""||isNaN(+v))delete s.milesRates[i.dataset.mrate];else s.milesRates[i.dataset.mrate]=+v;write("meta","settings",s);toast(`${i.dataset.mrate}: R$ ${mrate(i.dataset.mrate)} o milheiro`);const f=$("#sheetForm"),y=f.scrollTop;milesSheet(ui.milesG);f.scrollTop=y;});
 document.addEventListener("input",e=>{if(e.target.closest&&e.target.closest("#sheetForm")&&(e.target.id==="f_pts"||e.target.dataset.ppp!=null))progHint();});
 document.addEventListener("change",e=>{if(e.target.id==="f_prog")progHint();});
 /* ---------- exportações ---------- */
