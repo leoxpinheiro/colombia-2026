@@ -3400,5 +3400,39 @@ function exportRoteiro(){
   h+=`<h2>Voos</h2><table><tr><th>Data</th><th>Trecho</th><th>Horário</th><th>Voo</th><th>Localizador</th><th>Status</th></tr>${flightsSorted().map(f=>`<tr><td>${dShort(f.date)}</td><td>${esc(f.frm)} → ${esc(f.to)}</td><td>${hm(f.dep)||"—"} → ${hm(f.arr)||"—"}</td><td>${esc((f.airline||"")+" "+(f.number||""))}</td><td>${esc(f.pnr||"")}</td><td>${esc(f.status)}</td></tr>`).join("")}</table>`;
   h+=`<h2>Hospedagens</h2><table><tr><th>Cidade</th><th>Hotel</th><th>Datas</th><th>Reserva</th><th>Endereço</th></tr>${Object.values(S.hotels).sort((a,b)=>(a.checkin||"").localeCompare(b.checkin||"")).map(x=>`<tr><td>${esc(x.city)}</td><td>${esc(x.name)}</td><td>${dShort(x.checkin)}–${dShort(x.checkout)}</td><td>${esc(x.code||"")}</td><td>${esc(x.address||"")}</td></tr>`).join("")}</table>`;
   dayList().forEach(d=>{const as=actsOfDay(d);if(!as.length)return;h+=`<h2>${dLong(d)} · ${esc(cityOfDay(d))}</h2><table>${as.map(a=>`<tr><td class="t">${a._e.time?hm(a._e.time):"—"}</td><td><b>${esc(a.title)}</b>${a.place?`<div class="m">${esc(a.place)}</div>`:""}${a.desc?`<div>${esc(a.desc)}</div>`:""}</td></tr>`).join("")}</table>`;});
-  h+="
+  h+="</body></html>";save("nossa-viagem-2026-roteiro.html",new Blob([h],{type:"text/html"}));
+}
+function exportCSV(){const F=finance();const q=s=>`"${String(s??"").replace(/"/g,'""')}"`;let csv="﻿Data;Descrição;Categoria;Valor;Moeda;Valor em R$;Pagamento;Forma;Parcelas;Quem pagou;Dividido entre\n";
+  F.L.forEach(l=>{csv+=[l.date,l.desc,l.cat,String(l.total).replace(".",","),l.cur,l.brl.toFixed(2).replace(".",","),l.pay,l.method||"",l.inst||"",l.payer||"",l.split.join(", ")].map(q).join(";")+"\n";});
+  save("nossa-viagem-2026-gastos.csv",new Blob([csv],{type:"text/csv"}));}
+function exportJSON(){save("nossa-viagem-2026-backup.json",new Blob([JSON.stringify(S,null,1)],{type:"application/json"}));}
+
+/* ---------- conexão ---------- */
+let snapAt="",encBlob=null;
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function unlock(pass){
+  if(!encBlob){const r=await fetch("data-full.json",{cache:"no-store"});if(!r.ok)throw new Error("sem dados");encBlob=await r.json();}
+  const enc=new TextEncoder();const base=await crypto.subtle.importKey("raw",enc.encode(pass.trim().toUpperCase()),"PBKDF2",false,["deriveKey"]);
+  const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(encBlob.salt),iterations:encBlob.iter,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);
+  const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(encBlob.iv)},key,b64(encBlob.ct));
+  const d=JSON.parse(new TextDecoder().decode(pt));COLS.forEach(k=>{S[k]=d[k]||{};});snapAt=d._at||"";conn="snapshot";
+  try{localStorage.setItem("nv26-pass",pass.trim().toUpperCase());}catch(e){}render();return true;}
+async function loadSnapshot(){let saved="";try{saved=localStorage.getItem("nv26-pass")||"";}catch(e){}
+  if(saved){try{await unlock(saved);return;}catch(e){try{localStorage.removeItem("nv26-pass");}catch(_){}}}
+  conn="locked";render();}
+render();
+(async()=>{
+  const use=window.claude&&window.claude.use;
+  if(use){try{db=await window.claude.use("db");}catch(e){db=null;}}
+  if(!db){await loadSnapshot();if(!use)return;}
+  else{COLS.forEach(col=>{db.collection(col).onSnapshot(snap=>{const o={};snap.docs.forEach(d=>{o[d.id]=d.data();});S[col]=o;loaded.add(col);if(loaded.size===COLS.length){conn="live";setTimeout(()=>ensureHotelActs(),1500);}saveCache();if(!form)render();},err=>{conn="off";render();});});}
+  try{assets=await window.claude.use("assets");}catch(e){assets=null;}
+  try{downloads=await window.claude.use("downloads");}catch(e){downloads=null;}
+  render();
+})();
+addEventListener("resize",()=>{if($("#waves"))waves();});
+setInterval(()=>{if(ui.tab==="hoje"&&$("#sheet").hidden&&!document.hidden)render();},60000);
+})();
+</script>
+
 <script>if("serviceWorker" in navigator&&!window.claude)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script></body></html>
